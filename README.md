@@ -55,7 +55,7 @@
             color: #8b949e;
         }
 
-        /* Ícones de Tecnologia (simulando, pois o GitHub não carrega imagens externas facilmente) */
+        /* Ícones de Tecnologia (simulando, pois o GitHub limita imagens) */
         .tech-icons {
             display: flex;
             flex-wrap: wrap;
