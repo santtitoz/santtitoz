@@ -14,20 +14,6 @@ Sou um desenvolvedor Fullstack com uma paixão incessante por **desvendar como a
 
 ---
 
-## 🛠️ Stack de Desenvolvimento
-
-Trabalhando em todas as camadas da aplicação para entregar projetos de ponta a ponta.
-
-### Linguagens e Frameworks Principais
-
-| Categoria | Destaque | Tecnologias |
-| :--- | :--- | :--- |
-| **Frontend** | **React** (Com ênfase em UI/UX) | TypeScript, JavaScript (ES6+), HTML5, CSS3 |
-| **Backend** | **Python/Django** | Node.js, RESTful APIs, Express |
-| **DevOps & DB** | **Git** | PostgreSQL, MongoDB, Docker |
-
-<br clear="both">
-
 ### Proficiência Visual
 
 <div align="center">
