@@ -48,10 +48,6 @@ Trabalhando em todas as camadas da aplicação para entregar projetos de ponta a
 
 ---
 
-## 📈 Atividade GitHub (Pac-Man)
-
-O Pac-Man mostra meus commits diários!
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/santtitoz/santtitoz/output/pacman-contribution-graph-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/santtitoz/santtitoz/output/pacman-contribution-graph.svg">
