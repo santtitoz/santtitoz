@@ -19,20 +19,10 @@ Aqui estão os escudos (badges) das tecnologias. Eles são gerados por um servi�
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
 ---
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/santtitoz/santtitoz/output/pacman-contribution-graph-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/santtitoz/santtitoz/output/pacman-contribution-graph.svg">
+  <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/santtitoz/santtitoz/output/pacman-contribution-graph.svg">
+</picture>
 
-### 📧 Entre em Contato
-
-Você pode me encontrar nestes canais:
-
-| Plataforma | Link |
-| :--- | :--- |
-| **Email** | [seu.email@exemplo.com](mailto:seu.email@exemplo.com) |
-| **LinkedIn** | [Meu Perfil no LinkedIn](https://www.linkedin.com/in/seu_perfil) |
-
-[![E-mail](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:seu.email@exemplo.com)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/seu_perfil)
-
-
-
-# Eliabi - Desenvolvedor Frontend ✨
-https://capsule-render.vercel.app/api?type=waving&height=300&color=gradient&text=Eliabi%20Medeiros&section=footer
+###
