@@ -34,10 +34,12 @@ Sou um desenvolvedor Fullstack com uma paixão incessante por **desvendar como a
 
 ---
 
+## 📈 Atividade GitHub (Pac-Man)
+
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/santtitoz/santtitoz/output/pacman-contribution-graph-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/santtitoz/santtitoz/output/pacman-contribution-graph.svg">
-  <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/santtitoz/santtitoz/output/pacman-contribution-graph.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/santtitoz/santtitoz/output/pacman-contribution-graph-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/santtitoz/santtitoz/output/pacman-contribution-graph.svg">
+  <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/santtitoz/santtitoz/output/pacman-contribution-graph.svg">
 </picture>
 
 ---
@@ -47,16 +49,10 @@ Sou um desenvolvedor Fullstack com uma paixão incessante por **desvendar como a
 Estou sempre aberto a novas conexões e discussões sobre tecnologia, design ou o último jogo lançado!
 
 <div align="center">
-    <a href="https://www.linkedin.com/in/SEU_PERFIL_AQUI" target="_blank">
-        <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/linkedin/default.svg" width="52" height="40" alt="linkedin logo" />
-    </a>
-    <a href="mailto:SEU_EMAIL_AQUI@gmail.com" target="_blank">
-        <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/gmail/default.svg" width="52" height="40" alt="gmail logo" />
-    </a>
-    <a href="SEU_LINK_DISCORD_AQUI" target="_blank">
-        <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/discord/default.svg" width="52" height="40" alt="discord logo" />
-    </a>
-    <a href="https://twitter.com/SEU_TWITTER_AQUI" target="_blank">
-        <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/twitter/default.svg" width="52" height="40" alt="twitter logo" />
-    </a>
+        <a href="https://www.linkedin.com/in/santtitoz" target="_blank">
+        <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/linkedin/default.svg" width="52" height="40" alt="linkedin logo" />
+    </a>
+        <a href="mailto:esanttitoz@gmail.com" target="_blank">
+        <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/gmail/default.svg" width="52" height="40" alt="gmail logo" />
+    </a>
 </div>
