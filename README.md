@@ -6,7 +6,7 @@
 
 ## 🕹️ Sobre Mim
 
-Sou um desenvolvedor Fullstack com uma paixão incessante por **desvendar como as coisas funcionam**. Minha jornada é movida por uma **curiosidade extrema** por novas tecnologias, algoritmos complexos e, claro, um amor por games que inspira a busca por experiências de usuário impecáveis.
+Sou um desenvolvedor Fullstack com uma paixão incessante por **descobrir como as coisas funcionam**. Minha jornada é movida por uma **curiosidade extrema** por novas tecnologias, algoritmos complexos e, claro, jogar é uma paixão desde moleque.
 
 * **Mindset:** Da arquitetura backend robusta ao pixel perfeito no frontend.
 * **Hobbies:** Jogos (especialmente RPGs e Estratégia), ficção científica e explorar novas stacks.
