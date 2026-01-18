@@ -1,12 +1,12 @@
 # Olá! Eu sou o Eliabi 🚀
 
-### 🌐 Desenvolvedor Fullstack | Curioso Incurável | Gamer nas Horas Vagas
+### 🌐 Desenvolvedor Fullstack | Curioso | Gamer
 
 ---
 
 ## 🕹️ Sobre Mim
 
-Sou um desenvolvedor Fullstack com uma paixão incessante por **descobrir como as coisas funcionam**. Minha jornada é movida por uma **curiosidade extrema** por novas tecnologias, algoritmos complexos e, claro, jogar é uma paixão desde moleque.
+Sou um desenvolvedor Fullstack com uma paixão incessante por **descobrir como as coisas funcionam**. Minha jornada é movida por uma **curiosidade extrema** por novas tecnologias, algoritmos complexos e, claro, jogar é uma paixão desde criança.
 
 * **Mindset:** Da arquitetura backend robusta ao pixel perfeito no frontend.
 * **Hobbies:** Jogos (especialmente RPGs e Estratégia), ficção científica e explorar novas stacks.
