@@ -1,6 +1,6 @@
-# Olá! Eu sou o Eliabi 🚀
+# Olá! Me chamo Eliabi 🚀
 
-### 🌐 Desenvolvedor Fullstack | Curioso | Gamer
+### 🌐 Desenvolvedor Fullstack | Curioso | Jogador
 
 ---
 
