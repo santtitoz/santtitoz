@@ -164,13 +164,13 @@ export function Hero() {
           <DotWheel rotation={rotation} onRotate={setRotation} />
 
           {/* Badge Minimalista */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full bg-background border border-border/40 shadow-sm text-foreground/80 text-[10px] font-mono font-medium tracking-widest uppercase selection:bg-primary/20">
+          {/* <div className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full bg-background border border-border/40 shadow-sm text-foreground/80 text-[10px] font-mono font-medium tracking-widest uppercase selection:bg-primary/20">
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
             </span>
             Design Engineer • 2026
-          </div>
+          </div> */}
 
           {/* Título Monospace Interativo */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black font-mono tracking-tighter mb-8 leading-[0.9] text-foreground select-none z-10 uppercase flex flex-col items-start">
