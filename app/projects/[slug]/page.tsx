@@ -232,21 +232,23 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
           </div>
 
           <div className="container max-w-6xl mx-auto px-6 mb-16">
-            <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-10 lg:gap-16 items-start">
+            <div className="grid grid-cols-[35%_1fr] sm:grid-cols-[30%_1fr] lg:grid-cols-[220px_1fr] gap-6 sm:gap-10 lg:gap-16 items-start">
               {project.mobileImages && (
                 <div className="min-w-0 flex flex-col items-center">
-                  <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground w-full justify-start lg:justify-center">
-                    <Smartphone size={15} /> <span className="font-medium">Mobile</span>
-                    <span className="text-xs opacity-60">— Dia a dia</span>
+                  <div className="flex flex-col xl:flex-row items-center gap-1 xl:gap-2 mb-3 lg:mb-4 text-xs lg:text-sm text-muted-foreground w-full justify-center">
+                    <div className="flex items-center gap-1.5"><Smartphone size={14} /> <span className="font-medium">Mobile</span></div>
+                    <span className="text-[10px] lg:text-xs opacity-60 text-center xl:text-left hidden md:block">— Dia a dia</span>
                   </div>
-                  <MobileCarousel images={project.mobileImages} width="220px" />
+                  <div className="w-full max-w-[220px]">
+                    <MobileCarousel images={project.mobileImages} width="100%" />
+                  </div>
                 </div>
               )}
               {project.desktopImages && (
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
-                    <Monitor size={15} /> <span className="font-medium">Desktop</span>
-                    <span className="text-xs opacity-60">— Ferramenta avançada</span>
+                  <div className="flex flex-col xl:flex-row items-start xl:items-center gap-1 xl:gap-2 mb-3 lg:mb-4 text-xs lg:text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1.5"><Monitor size={14} /> <span className="font-medium">Desktop</span></div>
+                    <span className="text-[10px] lg:text-xs opacity-60 hidden md:block">— Ferramenta avançada</span>
                   </div>
                   <DesktopCarousel images={project.desktopImages} />
                 </div>
