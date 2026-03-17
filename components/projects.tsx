@@ -40,8 +40,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           <div className="flex items-center gap-2 mb-1">
             <h3 className="text-2xl font-bold text-foreground leading-tight tracking-tight">{project.title}</h3>
             {project.wip && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 text-[10px] font-bold uppercase tracking-wider">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                project.slug === 'vitaly'
+                  ? 'bg-purple-900/30 text-purple-400 border-purple-500/30'
+                  : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+              }`}>
+                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                  project.slug === 'vitaly' ? 'bg-purple-400' : 'bg-amber-400'
+                }`} />
                 Em Dev
               </span>
             )}

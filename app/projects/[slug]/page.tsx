@@ -177,8 +177,14 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
                   <span>Mobile</span>
                 </div>
                 {project.wip && (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 text-xs font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${
+                    project.slug === 'vitaly'
+                      ? 'bg-purple-900/30 text-purple-400 border-purple-500/30'
+                      : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                  }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                      project.slug === 'vitaly' ? 'bg-purple-400' : 'bg-amber-400'
+                    }`} />
                     Em Desenvolvimento
                   </div>
                 )}
@@ -190,8 +196,14 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
               </div>
 
               {project.wip && (
-                <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400/80 text-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
+                <div className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm ${
+                  project.slug === 'vitaly'
+                    ? 'bg-purple-900/10 text-purple-400/80 border-purple-500/20'
+                    : 'bg-amber-500/10 text-amber-400/80 border-amber-500/20'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full animate-pulse shrink-0 ${
+                    project.slug === 'vitaly' ? 'bg-purple-400' : 'bg-amber-400'
+                  }`} />
                   <span>Projeto em andamento — as telas são protótipos do design.</span>
                 </div>
               )}
@@ -213,8 +225,14 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
                 <span>Multiplataforma</span>
               </div>
               {project.wip && (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 text-xs font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${
+                  project.slug === 'vitaly'
+                    ? 'bg-purple-900/30 text-purple-400 border-purple-500/30'
+                    : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                    project.slug === 'vitaly' ? 'bg-purple-400' : 'bg-amber-400'
+                  }`} />
                   Em Desenvolvimento
                 </div>
               )}
@@ -224,8 +242,14 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
             <p className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed mb-6">{project.description}</p>
             
             {project.wip && (
-              <div className="inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400/80 text-sm mx-auto">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
+              <div className={`inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm mx-auto ${
+                project.slug === 'vitaly'
+                  ? 'bg-purple-900/10 text-purple-400/80 border-purple-500/20'
+                  : 'bg-amber-500/10 text-amber-400/80 border-amber-500/20'
+              }`}>
+                <span className={`w-1.5 h-1.5 rounded-full animate-pulse shrink-0 ${
+                  project.slug === 'vitaly' ? 'bg-purple-400' : 'bg-amber-400'
+                }`} />
                 <span>Projeto em andamento — as telas são protótipos do design.</span>
               </div>
             )}
