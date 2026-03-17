@@ -40,10 +40,34 @@ function Dots({ total, current, onChange }: { total: number; current: number; on
 /* ─── Desktop Carousel ─── */
 function DesktopCarousel({ images }: { images: string[] }) {
   const [idx, setIdx] = useState(0)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX)
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const dist = touchStart - touchEnd
+    if (images.length > 1) {
+      if (dist > 50) setIdx((i) => (i + 1) % images.length) // swipe left
+      if (dist < -50) setIdx((i) => (i - 1 + images.length) % images.length) // swipe right
+    }
+  }
+
   return (
     <div>
-      <div className="relative group rounded-2xl overflow-hidden border border-border/30 bg-muted/10 flex items-center justify-center bg-zinc-900/40">
-        <img key={idx} src={images[idx]} alt={`screenshot ${idx + 1}`} className="w-full max-h-[70vh] object-contain block" />
+      <div 
+        className="relative group rounded-2xl overflow-hidden border border-border/30 bg-muted/10 flex items-center justify-center bg-zinc-900/40 touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <img key={idx} src={images[idx]} alt={`screenshot ${idx + 1}`} className="w-full max-h-[70vh] object-contain block select-none pointer-events-none" draggable={false} />
         {images.length > 1 && (
           <>
             <button onClick={() => setIdx((i) => (i - 1 + images.length) % images.length)}
@@ -65,11 +89,38 @@ function DesktopCarousel({ images }: { images: string[] }) {
 /* ─── Mobile Carousel (phone frame) ─── */
 function MobileCarousel({ images, width = "240px" }: { images: string[]; width?: string }) {
   const [idx, setIdx] = useState(0)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX)
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const dist = touchStart - touchEnd
+    if (images.length > 1) {
+      if (dist > 50) setIdx((i) => (i + 1) % images.length)
+      if (dist < -50) setIdx((i) => (i - 1 + images.length) % images.length)
+    }
+  }
+
   return (
     <div>
       <div className="flex justify-center">
-        <div className="relative group" style={{ width }}>
-          <PhoneFrame src={images[idx]} alt={`mobile ${idx + 1}`} />
+        <div 
+          className="relative group touch-pan-y" 
+          style={{ width }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="select-none pointer-events-none" draggable={false}>
+            <PhoneFrame src={images[idx]} alt={`mobile ${idx + 1}`} />
+          </div>
           {images.length > 1 && (
             <>
               <button onClick={() => setIdx((i) => (i - 1 + images.length) % images.length)}
