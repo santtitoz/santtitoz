@@ -315,14 +315,19 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
         </section>
       )}
 
-      {/* ════════ DESKTOP: title on top + smaller centered gallery + info below ════════ */}
+      {/* ════════ DESKTOP: Side-by-side layout (Visuals Left, Info Right) ════════ */}
       {mode === "desktop" && (
-        <>
-          {/* Title section */}
-          <section className="pt-36 pb-10 px-6 text-center">
-            <div className="container max-w-3xl mx-auto">
+        <section className="container max-w-[90rem] mx-auto px-6 pt-36 pb-16">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+            {/* LEFT: preview */}
+            <div className="w-full lg:flex-[1.5] min-w-0">
+              <DesktopCarousel images={project.images} />
+            </div>
+
+            {/* RIGHT: title + info */}
+            <div className="w-full lg:flex-1 min-w-0 space-y-8">
               {/* Badges */}
-              <div className="flex flex-wrap justify-center gap-2 mb-6">
+              <div className="flex flex-wrap gap-2">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
                   <Monitor size={13} />
                   <span>Desktop</span>
@@ -335,41 +340,22 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
                 )}
               </div>
               
-              <h1 className="text-3xl sm:text-4xl md:text-7xl font-black tracking-tight leading-tight mb-6 break-words">{project.title}</h1>
-              <p className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed mb-10">{project.description}</p>
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                {project.live !== "#" && (
-                  <a href={project.live} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background rounded-full font-medium hover:bg-foreground/90 transition-colors">
-                    Acessar Projeto <ArrowUpRight size={18} />
-                  </a>
-                )}
-              </div>
-            </div>
-          </section>
-
-          {/* Gallery - Smaller to fit on screen */}
-          <section className="container max-w-4xl mx-auto px-6">
-            <DesktopCarousel images={project.images} />
-          </section>
-
-          {/* Info below */}
-          <section className="container max-w-4xl mx-auto px-6 mt-16 pb-16">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-border/30 pt-12">
               <div>
-                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Sobre o Projeto</h3>
-                <p className="text-foreground/80 leading-relaxed font-light text-lg">{project.longDescription || project.description}</p>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight mb-4 break-words">{project.title}</h1>
+                <p className="text-lg text-muted-foreground font-light leading-relaxed">{project.description}</p>
               </div>
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Tecnologias Utilizadas</h3>
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((tech) => (
-                    <span key={tech} className="px-3 py-1.5 text-xs font-semibold font-mono text-foreground bg-muted/50 rounded-lg border border-border/50 uppercase tracking-wider">{tech}</span>
-                  ))}
+
+              {project.wip && (
+                <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0 bg-blue-500 dark:bg-blue-400" />
+                  <span>Projeto em andamento — as telas são protótipos do design.</span>
                 </div>
-              </div>
+              )}
+
+              <InfoBlock project={project} />
             </div>
-          </section>
-        </>
+          </div>
+        </section>
       )}
 
     </div>
