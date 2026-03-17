@@ -172,19 +172,13 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
             <div className="flex-1 min-w-0 space-y-8">
               {/* Badges */}
               <div className="flex flex-wrap gap-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">
                   <Smartphone size={13} />
                   <span>Mobile</span>
                 </div>
                 {project.wip && (
-                  <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${
-                    project.slug === 'vitaly'
-                      ? 'bg-purple-900/30 text-purple-400 border-purple-500/30'
-                      : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
-                  }`}>
-                    <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
-                      project.slug === 'vitaly' ? 'bg-purple-400' : 'bg-amber-400'
-                    }`} />
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20">
+                    <span className="w-1.5 h-1.5 rounded-full animate-pulse bg-blue-500 dark:bg-blue-400" />
                     Em Desenvolvimento
                   </div>
                 )}
@@ -196,14 +190,8 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
               </div>
 
               {project.wip && (
-                <div className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm ${
-                  project.slug === 'vitaly'
-                    ? 'bg-purple-900/10 text-purple-400/80 border-purple-500/20'
-                    : 'bg-amber-500/10 text-amber-400/80 border-amber-500/20'
-                }`}>
-                  <span className={`w-1.5 h-1.5 rounded-full animate-pulse shrink-0 ${
-                    project.slug === 'vitaly' ? 'bg-purple-400' : 'bg-amber-400'
-                  }`} />
+                <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0 bg-blue-500 dark:bg-blue-400" />
                   <span>Projeto em andamento — as telas são protótipos do design.</span>
                 </div>
               )}
@@ -220,19 +208,13 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
           <div className="container max-w-4xl mx-auto px-6 text-center mb-16">
             {/* Badges */}
             <div className="flex flex-wrap justify-center gap-2 mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">
                 <Smartphone size={13} />
                 <span>Multiplataforma</span>
               </div>
               {project.wip && (
-                <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${
-                  project.slug === 'vitaly'
-                    ? 'bg-purple-900/30 text-purple-400 border-purple-500/30'
-                    : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
-                }`}>
-                  <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
-                    project.slug === 'vitaly' ? 'bg-purple-400' : 'bg-amber-400'
-                  }`} />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full animate-pulse bg-blue-500 dark:bg-blue-400" />
                   Em Desenvolvimento
                 </div>
               )}
@@ -242,14 +224,8 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
             <p className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed mb-6">{project.description}</p>
             
             {project.wip && (
-              <div className={`inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm mx-auto ${
-                project.slug === 'vitaly'
-                  ? 'bg-purple-900/10 text-purple-400/80 border-purple-500/20'
-                  : 'bg-amber-500/10 text-amber-400/80 border-amber-500/20'
-              }`}>
-                <span className={`w-1.5 h-1.5 rounded-full animate-pulse shrink-0 ${
-                  project.slug === 'vitaly' ? 'bg-purple-400' : 'bg-amber-400'
-                }`} />
+              <div className="inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm mx-auto bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20">
+                <span className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0 bg-blue-500 dark:bg-blue-400" />
                 <span>Projeto em andamento — as telas são protótipos do design.</span>
               </div>
             )}
@@ -290,8 +266,22 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
       {mode === "desktop" && (
         <>
           {/* Title section */}
-          <section className="pt-40 pb-10 px-6 text-center">
+          <section className="pt-36 pb-10 px-6 text-center">
             <div className="container max-w-3xl mx-auto">
+              {/* Badges */}
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">
+                  <Monitor size={13} />
+                  <span>Desktop</span>
+                </div>
+                {project.wip && (
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20">
+                    <span className="w-1.5 h-1.5 rounded-full animate-pulse bg-blue-500 dark:bg-blue-400" />
+                    Em Desenvolvimento
+                  </div>
+                )}
+              </div>
+              
               <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-tight mb-6">{project.title}</h1>
               <p className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed mb-10">{project.description}</p>
               <div className="flex flex-wrap items-center justify-center gap-4">
