@@ -37,7 +37,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       {/* Header with Title and Links */}
       <div className="flex justify-between items-start mb-6">
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
             <h3 className="text-2xl font-bold text-foreground leading-tight tracking-tight">{project.title}</h3>
             {project.wip && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20">

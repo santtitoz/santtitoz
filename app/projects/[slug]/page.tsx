@@ -172,7 +172,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
             <div className="flex-1 min-w-0 space-y-8">
               {/* Badges */}
               <div className="flex flex-wrap gap-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
                   <Smartphone size={13} />
                   <span>Mobile</span>
                 </div>
@@ -185,7 +185,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
               </div>
 
               <div>
-                <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-4">{project.title}</h1>
+                <h1 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight leading-tight mb-4 break-words">{project.title}</h1>
                 <p className="text-lg text-muted-foreground font-light leading-relaxed">{project.description}</p>
               </div>
 
@@ -208,7 +208,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
           <div className="container max-w-4xl mx-auto px-6 text-center mb-16">
             {/* Badges */}
             <div className="flex flex-wrap justify-center gap-2 mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
                 <Smartphone size={13} />
                 <span>Multiplataforma</span>
               </div>
@@ -220,7 +220,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
               )}
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-6">{project.title}</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight leading-tight mb-6 break-words">{project.title}</h1>
             <p className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed mb-6">{project.description}</p>
             
             {project.wip && (
@@ -270,7 +270,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
             <div className="container max-w-3xl mx-auto">
               {/* Badges */}
               <div className="flex flex-wrap justify-center gap-2 mb-6">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
                   <Monitor size={13} />
                   <span>Desktop</span>
                 </div>
@@ -282,7 +282,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
                 )}
               </div>
               
-              <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-tight mb-6">{project.title}</h1>
+              <h1 className="text-3xl sm:text-4xl md:text-7xl font-black tracking-tight leading-tight mb-6 break-words">{project.title}</h1>
               <p className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed mb-10">{project.description}</p>
               <div className="flex flex-wrap items-center justify-center gap-4">
                 {project.live !== "#" && (
