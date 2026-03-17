@@ -1,16 +1,9 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { ExternalLink, Github, ArrowUpRight } from "lucide-react"
-
-type Project = {
-  title: string
-  description: string
-  tech: string[]
-  github: string
-  live: string
-  images: string[]
-}
+import { ExternalLink, Github, ArrowUpRight, Smartphone, Download } from "lucide-react"
+import Link from "next/link"
+import { projects, Project } from "@/data/projects"
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [isVisible, setIsVisible] = useState(false)
@@ -36,13 +29,23 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
     <div
       ref={cardRef}
-      className={`group flex flex-col bg-muted/20 backdrop-blur-md border border-border/30 rounded-[2.5rem] p-6 lg:p-8 overflow-hidden hover:border-primary/20 hover:bg-muted/30 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"}`}
+      className={`group flex flex-col bg-muted/20 border border-border/30 rounded-[2.5rem] p-6 lg:p-8 overflow-hidden hover:border-primary/20 hover:bg-muted/30 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"}`}
       style={{ transitionDelay: `${index * 100}ms` }}
     >
+      <Link href={`/projects/${project.slug}`} className="absolute inset-0 z-10" aria-label={`Ver destalhes de ${project.title}`} />
+
       {/* Header with Title and Links */}
       <div className="flex justify-between items-start mb-6">
         <div>
-          <h3 className="text-2xl font-bold text-foreground leading-tight tracking-tight mb-2">{project.title}</h3>
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="text-2xl font-bold text-foreground leading-tight tracking-tight">{project.title}</h3>
+            {project.wip && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 text-[10px] font-bold uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                Em Dev
+              </span>
+            )}
+          </div>
           <div className="flex flex-wrap gap-2">
             {project.tech.map((tech) => (
               <span
@@ -55,7 +58,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 relative z-20">
           {project.github !== "#" && (
             <a
               href={project.github}
@@ -82,11 +85,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       </div>
 
       {/* Project Image Area */}
-      <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-border/30 bg-background/50 transition-all duration-500">
+      <div className="relative w-full rounded-2xl overflow-hidden border border-border/30 bg-background/50 transition-all duration-500">
         <img
           src={project.images[0]}
           alt={project.title}
-          className="w-full h-full object-cover object-top transition-transform duration-700"
+          className="w-full h-auto object-contain"
         />
       </div>
 
@@ -102,61 +105,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 }
 
 export function Projects() {
-  const projects = [
-    {
-      title: "Costanza",
-      description:
-        "O Costanza foi criado com o intuito de dominar linguagens de programação através de desafios, conquistar ranks, ganhar XP e compartilhar seus projetos com uma comunidade de desenvolvedores.",
-      tech: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
-      github: "https://github.com/santtitoz/costanza",
-      live: "https://costanza-taupe.vercel.app",
-      images: [
-        "/costanza/image-1.png",
-        "/costanza/image-2.png",
-        "/costanza/image-3.png",
-        "/costanza/image-4.png",
-        "/costanza/image-5.png",
-      ],
-    },
-    {
-      title: "E-commerce Moderno",
-      description:
-        "Plataforma completa de e-commerce com carrinho de compras, pagamentos integrados e painel administrativo.",
-      tech: ["Next.js", "TypeScript", "React", "Redux"],
-      github: "#",
-      live: "#",
-      images: [
-        "/modern-ecommerce-interface.png",
-        "/productivity-app-interface.png",
-        "/analytics-dashboard.png",
-      ],
-    },
-    {
-      title: "Dashboard Analytics",
-      description:
-        "Dashboard interativo para análise de dados em tempo real com gráficos dinâmicos e métricas de performance.",
-      tech: ["React", "Node.js", "Express", "JavaScript"],
-      github: "#",
-      live: "#",
-      images: [
-        "/analytics-dashboard.png",
-        "/modern-ecommerce-interface.png",
-        "/productivity-app-interface.png",
-      ],
-    },
-    {
-      title: "App de Produtividade",
-      description: "Aplicativo completo para gerenciamento de tarefas, projetos e equipes com sistema de notificações.",
-      tech: ["React", "Redux", "JavaScript", "Node.js"],
-      github: "#",
-      live: "#",
-      images: [
-        "/productivity-app-interface.png",
-        "/analytics-dashboard.png",
-        "/modern-ecommerce-interface.png",
-      ],
-    },
-  ]
 
   return (
     <section id="projects" className="bg-background relative py-20">

@@ -80,7 +80,7 @@ export function Contact() {
                 <Linkedin className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors" />
               </a>
               <a
-                href="https://discord.com"
+                href="https://discord.com/users/1137430043182780447"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-4 rounded-2xl bg-background/50 border border-border/20 backdrop-blur-sm hover:bg-primary/10 hover:border-primary/30 hover:scale-105 transition-all duration-300 group shadow-sm hover:shadow-lg"
@@ -88,7 +88,7 @@ export function Contact() {
                 <DiscordIcon className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors" />
               </a>
               <a
-                href="/curriculo.pdf"
+                href="public\lift\Eliabi-Santos.pdf"
                 download="Eliabi_Santos_Curriculo.pdf"
                 className="p-4 rounded-2xl bg-background/50 border border-border/20 backdrop-blur-sm hover:bg-primary/10 hover:border-primary/30 hover:scale-105 transition-all duration-300 group shadow-sm hover:shadow-lg"
               >

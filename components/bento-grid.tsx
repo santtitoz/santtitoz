@@ -138,7 +138,7 @@ export function BentoGrid() {
 
         {/* Card 7: Discord */}
         <a
-          href="https://discord.com/users/359873934371422209"
+          href="https://discord.com/users/1137430043182780447"
           target="_blank"
           className={`bg-[#5865F2] text-white rounded-3xl p-6 flex flex-col justify-center items-center gap-3 cursor-pointer hover:scale-[1.02] transition-all duration-1000 delay-700 ${isVisible ? "animate-fade-in-up opacity-100" : "opacity-0 translate-y-10"}`}
         >

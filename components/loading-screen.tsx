@@ -7,10 +7,18 @@ export function LoadingScreen() {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
+    // Check if loading screen has already been shown in this session
+    const hasLoaded = sessionStorage.getItem("hasLoaded")
+    if (hasLoaded) {
+      setIsVisible(false)
+      return
+    }
+
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(progressInterval)
+          sessionStorage.setItem("hasLoaded", "true")
           setTimeout(() => setIsVisible(false), 1200)
           return 100
         }
