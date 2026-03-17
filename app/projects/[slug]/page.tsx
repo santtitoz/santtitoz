@@ -232,7 +232,16 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
           </div>
 
           <div className="container max-w-6xl mx-auto px-6 mb-16">
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-10 lg:gap-16 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-10 lg:gap-16 items-start">
+              {project.mobileImages && (
+                <div className="min-w-0 flex flex-col items-center">
+                  <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground w-full justify-start lg:justify-center">
+                    <Smartphone size={15} /> <span className="font-medium">Mobile</span>
+                    <span className="text-xs opacity-60">— Dia a dia</span>
+                  </div>
+                  <MobileCarousel images={project.mobileImages} width="220px" />
+                </div>
+              )}
               {project.desktopImages && (
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
@@ -240,15 +249,6 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
                     <span className="text-xs opacity-60">— Ferramenta avançada</span>
                   </div>
                   <DesktopCarousel images={project.desktopImages} />
-                </div>
-              )}
-              {project.mobileImages && (
-                <div className="min-w-0 flex flex-col items-center">
-                  <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground w-full justify-start lg:justify-center">
-                    <Smartphone size={15} /> <span className="font-medium">Mobile</span>
-                    <span className="text-xs opacity-60">— Dia a dia</span>
-                  </div>
-                  <MobileCarousel images={project.mobileImages} width="240px" />
                 </div>
               )}
             </div>
