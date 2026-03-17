@@ -68,12 +68,15 @@ export function CommandMenu() {
       </div>
 
       {/* Visual Indicator for Desktop */}
-      <div className="fixed bottom-6 right-6 hidden md:flex items-center gap-2 p-2 px-3 rounded-lg bg-background/50 backdrop-blur-sm border border-border/40 text-xs text-muted-foreground shadow-sm pointer-events-none select-none z-50">
+      <button 
+        onClick={() => setOpen(true)}
+        className="fixed bottom-6 right-6 hidden md:flex items-center gap-2 p-2 px-3 rounded-lg bg-background/50 backdrop-blur-sm border border-border/40 text-xs text-muted-foreground shadow-sm select-none z-50 cursor-pointer hover:bg-background/80 hover:text-foreground transition-colors"
+      >
         <span className="font-mono text-xs border border-border p-1 rounded bg-muted/50">⌘</span>
         <span>+</span>
         <span className="font-mono text-xs border border-border p-1 rounded bg-muted/50">K</span>
         <span className="ml-1 opacity-75">to navigate</span>
-      </div>
+      </button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="Type a command or search..." />

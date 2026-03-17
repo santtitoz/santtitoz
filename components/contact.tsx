@@ -30,7 +30,7 @@ export function Contact() {
   }, [])
 
   return (
-    <section id="contact" ref={sectionRef} className="min-h-screen flex flex-col justify-center">
+    <section id="contact" ref={sectionRef} className="w-full pt-10">
       {/* <div className="container max-w-6xl mx-auto px-6">
         <div className={`transition-all duration-1000 ${isVisible ? "animate-fade-in-up opacity-100" : "opacity-0"}`}>
           <div className="max-w-2xl mx-auto text-center">
@@ -53,7 +53,7 @@ export function Contact() {
         </div>
       </div> */}
 
-      <footer className="mt-auto py-8 border-t border-border/30">
+      <footer className="py-12 border-t border-border/30 w-full mt-10">
         <div className="container max-w-6xl mx-auto px-6">
           <div className="text-center space-y-8">
             <div className="flex justify-center items-center gap-4">
@@ -88,7 +88,7 @@ export function Contact() {
                 <DiscordIcon className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors" />
               </a>
               <a
-                href="public\lift\Eliabi-Santos.pdf"
+                href="/lift/Eliabi-Santos.pdf.pdf"
                 download="Eliabi_Santos_Curriculo.pdf"
                 className="p-4 rounded-2xl bg-background/50 border border-border/20 backdrop-blur-sm hover:bg-primary/10 hover:border-primary/30 hover:scale-105 transition-all duration-300 group shadow-sm hover:shadow-lg"
               >

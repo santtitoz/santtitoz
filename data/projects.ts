@@ -7,6 +7,7 @@ export type Project = {
   github: string
   live: string
   download?: string
+  version?: string
   isMobile?: boolean
   wip?: boolean
   /** Controls how the detail page renders the gallery */
@@ -66,7 +67,7 @@ export const projects: Project[] = [
     isMobile: true,
     wip: true,
     displayMode: "multiplatform",
-    images: ["/vitaly/image-5.png"],
+    images: ["/vitaly/vitaly-summary.png"],
     desktopImages: [
       "/vitaly/image-5.png",
       "/vitaly/image-1.png",
@@ -93,10 +94,11 @@ export const projects: Project[] = [
     tech: ["React Native", "Capacitor", "TypeScript", "Tailwind CSS"],
     github: "#",
     live: "#",
-    download: "#",
+    download: "/lift/app-debug.apk",
+    version: "0.1.367",
     isMobile: true,
     displayMode: "mobile",
-    images: ["/lift/mobile.jpg"],
+    images: ["/lift/lift-summary.png"],
     mobileImages: [
       "/lift/mobile-1.jpg",
       "/lift/mobile-2.jpg",

@@ -42,8 +42,8 @@ function DesktopCarousel({ images }: { images: string[] }) {
   const [idx, setIdx] = useState(0)
   return (
     <div>
-      <div className="relative group rounded-2xl overflow-hidden border border-border/30 bg-muted/10">
-        <img key={idx} src={images[idx]} alt={`screenshot ${idx + 1}`} className="w-full h-auto block" />
+      <div className="relative group rounded-2xl overflow-hidden border border-border/30 bg-muted/10 flex items-center justify-center bg-zinc-900/40">
+        <img key={idx} src={images[idx]} alt={`screenshot ${idx + 1}`} className="w-full max-h-[70vh] object-contain block" />
         {images.length > 1 && (
           <>
             <button onClick={() => setIdx((i) => (i - 1 + images.length) % images.length)}
@@ -118,7 +118,9 @@ function InfoBlock({ project }: { project: ReturnType<typeof projects.find> }) {
         )}
         {project.download && project.download !== "#" && (
           <a href={project.download} download className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-medium hover:bg-primary/90 shadow-lg shadow-primary/20">
-            <Download size={16} /> Baixar APK
+            <Download size={16} /> 
+            Baixar APK 
+            {project.version && <span className="opacity-80 font-normal">v{project.version}</span>}
           </a>
         )}
       </div>
@@ -155,38 +157,25 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
         </div>
       </nav>
 
-      {/* ════════ MOBILE / MULTIPLATFORM: two-column hero ════════ */}
-      {(mode === "mobile" || mode === "multiplatform") && (
+      {/* ════════ MOBILE: two-column hero ════════ */}
+      {mode === "mobile" && (
         <section className="container max-w-6xl mx-auto px-6 pt-36 pb-16">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
-
             {/* LEFT: preview */}
-            <div className="w-full lg:w-auto lg:shrink-0">
-
-              {/* Mobile-only: single phone carousel */}
-              {mode === "mobile" && project.mobileImages && (
+            <div className="w-full lg:w-auto lg:shrink-0 flex justify-center">
+              {project.mobileImages && (
                 <MobileCarousel images={project.mobileImages} width="260px" />
               )}
-
-              {/* Multiplatform: showcase image wide */}
-              {mode === "multiplatform" && project.combinedImage && (
-                <div className="rounded-2xl overflow-hidden border border-border/20 bg-muted/5 max-w-[540px] w-full">
-                  <img src={project.combinedImage} alt={`${project.title} showcase`} className="w-full h-auto block" />
-                </div>
-              )}
-
             </div>
 
             {/* RIGHT: title + info */}
             <div className="flex-1 min-w-0 space-y-8">
               {/* Badges */}
               <div className="flex flex-wrap gap-2">
-                {project.isMobile && (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
-                    <Smartphone size={13} />
-                    <span>{mode === "multiplatform" ? "Multiplataforma" : "Mobile"}</span>
-                  </div>
-                )}
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
+                  <Smartphone size={13} />
+                  <span>Mobile</span>
+                </div>
                 {project.wip && (
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 text-xs font-medium">
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
@@ -210,30 +199,70 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
               <InfoBlock project={project} />
             </div>
           </div>
-
-          {/* Multiplatform: desktop carousel below the hero + mobile individual carousel */}
-          {mode === "multiplatform" && project.desktopImages && project.mobileImages && (
-            <div className="mt-16 space-y-10">
-              <div>
-                <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
-                  <Monitor size={15} /> <span className="font-medium">Desktop</span>
-                  <span className="text-xs opacity-60">— Ferramenta avançada</span>
-                </div>
-                <DesktopCarousel images={project.desktopImages} />
-              </div>
-              <div>
-                <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
-                  <Smartphone size={15} /> <span className="font-medium">Mobile</span>
-                  <span className="text-xs opacity-60">— Dia a dia</span>
-                </div>
-                <MobileCarousel images={project.mobileImages} width="200px" />
-              </div>
-            </div>
-          )}
         </section>
       )}
 
-      {/* ════════ DESKTOP: full-width gallery + info below ════════ */}
+      {/* ════════ MULTIPLATFORM: title -> visuals -> info ════════ */}
+      {mode === "multiplatform" && (
+        <section className="pt-36 pb-16">
+          <div className="container max-w-4xl mx-auto px-6 text-center mb-16">
+            {/* Badges */}
+            <div className="flex flex-wrap justify-center gap-2 mb-6">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
+                <Smartphone size={13} />
+                <span>Multiplataforma</span>
+              </div>
+              {project.wip && (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 text-xs font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  Em Desenvolvimento
+                </div>
+              )}
+            </div>
+
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-6">{project.title}</h1>
+            <p className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed mb-6">{project.description}</p>
+            
+            {project.wip && (
+              <div className="inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400/80 text-sm mx-auto">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
+                <span>Projeto em andamento — as telas são protótipos do design.</span>
+              </div>
+            )}
+          </div>
+
+          <div className="container max-w-6xl mx-auto px-6 mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-10 lg:gap-16 items-start">
+              {project.desktopImages && (
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
+                    <Monitor size={15} /> <span className="font-medium">Desktop</span>
+                    <span className="text-xs opacity-60">— Ferramenta avançada</span>
+                  </div>
+                  <DesktopCarousel images={project.desktopImages} />
+                </div>
+              )}
+              {project.mobileImages && (
+                <div className="min-w-0 flex flex-col items-center">
+                  <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground w-full justify-start lg:justify-center">
+                    <Smartphone size={15} /> <span className="font-medium">Mobile</span>
+                    <span className="text-xs opacity-60">— Dia a dia</span>
+                  </div>
+                  <MobileCarousel images={project.mobileImages} width="240px" />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="container max-w-4xl mx-auto px-6">
+            <div className="pt-10 border-t border-border/30">
+              <InfoBlock project={project} />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ════════ DESKTOP: title on top + smaller centered gallery + info below ════════ */}
       {mode === "desktop" && (
         <>
           {/* Title section */}
@@ -251,13 +280,13 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
             </div>
           </section>
 
-          {/* Gallery */}
-          <section className="container max-w-5xl mx-auto px-6">
+          {/* Gallery - Smaller to fit on screen */}
+          <section className="container max-w-4xl mx-auto px-6">
             <DesktopCarousel images={project.images} />
           </section>
 
           {/* Info below */}
-          <section className="container max-w-5xl mx-auto px-6 mt-16">
+          <section className="container max-w-4xl mx-auto px-6 mt-16 pb-16">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-border/30 pt-12">
               <div>
                 <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Sobre o Projeto</h3>

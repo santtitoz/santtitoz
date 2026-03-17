@@ -16,7 +16,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Eliabi Santos - Web Designer & Developer",
+  title: "Eliabi Santos",
   description:
     "Portfólio de Eliabi Santos - Web Designer Web Developer Junior especializado em React, Next.js e desenvolvimento frontend"
 }
