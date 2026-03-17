@@ -14,12 +14,12 @@ function PhoneFrame({ src, alt }: { src: string; alt: string }) {
   return (
     <div className="relative bg-zinc-900 rounded-[0.75rem] p-[3px] shadow-xl shadow-black/50 ring-1 ring-white/10 w-full">
       <div className="bg-black rounded-[0.6rem] overflow-hidden relative">
-        <div className="absolute top-1.5 left-1/2 -translate-x-1/2 z-10 w-10 h-2.5 bg-zinc-800 rounded-full" />
+        <div className="absolute top-1.5 left-1/2 -translate-x-1/2 z-10 w-[30%] max-w-[40px] h-[10px] bg-zinc-800 rounded-full" />
         <img src={src} alt={alt} className="w-full h-auto block" loading="lazy" />
       </div>
-      <div className="absolute left-[-3px] top-[90px] w-[3px] h-8 bg-zinc-700 rounded-l-sm" />
-      <div className="absolute left-[-3px] top-[132px] w-[3px] h-8 bg-zinc-700 rounded-l-sm" />
-      <div className="absolute right-[-3px] top-[112px] w-[3px] h-14 bg-zinc-700 rounded-r-sm" />
+      <div className="absolute left-[-3px] top-[20%] w-[3px] h-[8%] bg-zinc-700 rounded-l-sm hidden sm:block" />
+      <div className="absolute left-[-3px] top-[30%] w-[3px] h-[8%] bg-zinc-700 rounded-l-sm hidden sm:block" />
+      <div className="absolute right-[-3px] top-[25%] w-[3px] h-[12%] bg-zinc-700 rounded-r-sm hidden sm:block" />
     </div>
   )
 }
@@ -283,7 +283,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
           </div>
 
           <div className="container max-w-6xl mx-auto px-6 mb-16">
-            <div className="grid grid-cols-[80px_1fr] sm:grid-cols-[120px_1fr] md:grid-cols-[160px_1fr] lg:grid-cols-[220px_1fr] gap-4 sm:gap-8 lg:gap-16 items-start">
+            <div className="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr] md:grid-cols-[180px_1fr] lg:grid-cols-[220px_1fr] gap-4 sm:gap-8 lg:gap-16 items-start">
               {project.mobileImages && (
                 <div className="min-w-0 flex flex-col items-center">
                   <div className="flex flex-col xl:flex-row items-center gap-1 xl:gap-2 mb-3 lg:mb-4 text-xs lg:text-sm text-muted-foreground w-full justify-center">
