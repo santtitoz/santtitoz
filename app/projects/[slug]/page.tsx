@@ -283,7 +283,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
           </div>
 
           <div className="container max-w-6xl mx-auto px-6 mb-16">
-            <div className="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr] md:grid-cols-[180px_1fr] lg:grid-cols-[220px_1fr] gap-4 sm:gap-8 lg:gap-16 items-start">
+            <div className="grid grid-cols-[70px_1fr] sm:grid-cols-[90px_1fr] md:grid-cols-[130px_1fr] lg:grid-cols-[180px_1fr] gap-4 sm:gap-6 lg:gap-12 items-start justify-center max-w-5xl mx-auto">
               {project.mobileImages && (
                 <div className="min-w-0 flex flex-col items-center">
                   <div className="flex flex-col xl:flex-row items-center gap-1 xl:gap-2 mb-3 lg:mb-4 text-xs lg:text-sm text-muted-foreground w-full justify-center">
