@@ -2,41 +2,19 @@
 
 import { useEffect, useState } from "react"
 
-const codeLines = [
-  "import { Canvas } from '@react-three/fiber';",
-  "import { OrbitControls } from '@react-three/drei';",
-  "",
-  "function RubiksCube() {",
-  "  return (",
-  "    <Canvas camera={{ position: [3.5, 3.5, 3.5] }}>",
-  "      <ambientLight intensity={0.6} />",
-  "      <Environment preset='city' />",
-  "      ",
-  "      <group rotation={[0.5, 0.5, 0]}>",
-  "         {/* Initializing 3x3 Logic */}",
-  "         <InteractiveCube />",
-  "      </group>",
-  "      ",
-  "      <OrbitControls enableZoom={false} />",
-  "    </Canvas>",
-  "  );",
-  "}",
-]
-
 // Helper para syntax highlighting simples
 const HighlightCode = ({ line }: { line: string }) => {
   if (!line) return <span className="inline-block h-4" />
 
-  // Regex para separar tokens mantendo delimitadores
   const parts = line.split(/(\b|\W)/)
 
   return (
     <>
       {parts.map((part, i) => {
-        if (["import", "from", "function", "return", "const", "export", "default"].includes(part)) {
+        if (["import", "from", "function", "return", "const", "export", "default", "useState", "useRef", "useFrame"].includes(part)) {
           return <span key={i} className="text-primary/90 font-bold">{part}</span>
         }
-        if (["Canvas", "OrbitControls", "group", "ambientLight", "Environment", "InteractiveCube"].includes(part)) {
+        if (["Canvas", "Float", "ContactShadows", "Chest", "Latch", "MinecraftChest", "EnderChest", "group", "RubiksCube", "PlanetCube"].includes(part)) {
           return <span key={i} className="text-yellow-500/90">{part}</span>
         }
         if (part.startsWith("'") || part.startsWith('"')) {
@@ -51,27 +29,40 @@ const HighlightCode = ({ line }: { line: string }) => {
   )
 }
 
-export function TypedCode({ onComplete }: { onComplete?: () => void }) {
+interface TypedCodeProps {
+  lines: string[]
+  filename: string
+  directory: string
+  onComplete?: () => void
+}
+
+export function TypedCode({ lines, filename, directory, onComplete }: TypedCodeProps) {
   const [displayedLines, setDisplayedLines] = useState<string[]>([])
   const [currentLine, setCurrentLine] = useState(0)
   const [currentChar, setCurrentChar] = useState(0)
 
+  // Reset state when lines change
   useEffect(() => {
-    if (currentLine >= codeLines.length) {
+    setDisplayedLines([])
+    setCurrentLine(0)
+    setCurrentChar(0)
+  }, [lines, filename, directory])
+
+  useEffect(() => {
+    if (currentLine >= lines.length) {
       if (onComplete) {
-        const t = setTimeout(onComplete, 1200) // Tempo extra para admirar o código completo
+        const t = setTimeout(onComplete, 200)
         return () => clearTimeout(t)
       }
       return
     }
 
-    if (currentChar < codeLines[currentLine].length) {
-      // Variação de velocidade para parecer digitação humana
-      const randomDelay = Math.random() * 30 + 10
+    if (currentChar < lines[currentLine].length) {
+      const randomDelay = Math.random() * 13 + 5
       const timeout = setTimeout(() => {
         setDisplayedLines((prev) => {
           const newLines = [...prev]
-          newLines[currentLine] = codeLines[currentLine].slice(0, currentChar + 1)
+          newLines[currentLine] = lines[currentLine].slice(0, currentChar + 1)
           return newLines
         })
         setCurrentChar(currentChar + 1)
@@ -81,10 +72,10 @@ export function TypedCode({ onComplete }: { onComplete?: () => void }) {
       const timeout = setTimeout(() => {
         setCurrentLine(currentLine + 1)
         setCurrentChar(0)
-      }, 50)
+      }, 20)
       return () => clearTimeout(timeout)
     }
-  }, [currentChar, currentLine, onComplete])
+  }, [currentChar, currentLine, onComplete, lines])
 
   return (
     <div className="w-full h-full p-8 md:p-12 flex flex-col font-mono text-xs sm:text-sm z-20">
@@ -92,7 +83,7 @@ export function TypedCode({ onComplete }: { onComplete?: () => void }) {
       {/* Header Minimalista */}
       <div className="flex items-center gap-3 mb-6 opacity-40 select-none border-b border-foreground/10 pb-4 w-full">
         <div className="w-2 h-2 rounded-full bg-foreground/50" />
-        <span className="uppercase tracking-widest text-[10px] font-bold">src/components/cube.tsx</span>
+        <span className="uppercase tracking-widest text-[10px] font-bold">src/components/templates/{directory}/{filename}</span>
       </div>
 
       {/* Code Editor Area */}
@@ -119,3 +110,4 @@ export function TypedCode({ onComplete }: { onComplete?: () => void }) {
     </div>
   )
 }
+

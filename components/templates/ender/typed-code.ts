@@ -1,0 +1,38 @@
+// Animated typed-code lines displayed alongside the Ender Chest template
+
+export const ENDER_FILENAME = "ender-chest-3d.tsx"
+
+export const ENDER_CODE_LINES: string[] = [
+  "import { Canvas, useFrame } from '@react-three/fiber';",
+  "import { Float, ContactShadows } from '@react-three/drei';",
+  "",
+  "const OBSIDIAN = ['#24183A', '#18102A', '#0E0A18'];",
+  "const EYE_GLOW = {",
+  "  color: '#CC55FF',",
+  "  emissive: '#AA00FF',",
+  "  intensity: 1.6,",
+  "};",
+  "",
+  "function EnderChest() {",
+  "  const [isOpen, setIsOpen] = useState(false);",
+  "  const pivotRef = useRef(null);",
+  "  const glowRef  = useRef(null);",
+  "",
+  "  useFrame((_, dt) => {",
+  "    const target = isOpen ? -1.38 : 0;",
+  "    pivotRef.current.rotation.x =",
+  "      lerp(pivotRef.current.rotation.x, target, dt * 5);",
+  "    glowRef.current.intensity =",
+  "      lerp(glowRef.current.intensity,",
+  "        isOpen ? 4.0 : 0, dt * 3.5);",
+  "  });",
+  "",
+  "  return (",
+  "    <group onClick={() => setIsOpen(o => !o)}>",
+  "      <EnderBody palette={OBSIDIAN} />",
+  "      <pointLight ref={glowRef}",
+  "        color='#9900FF' distance={1.8} />",
+  "    </group>",
+  "  );",
+  "}",
+]

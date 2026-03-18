@@ -155,7 +155,10 @@ function InfoBlock({ project }: { project: ReturnType<typeof projects.find> }) {
         <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Tecnologias</h3>
         <div className="flex flex-wrap gap-2">
           {project.tech.map((tech) => (
-            <span key={tech} className="px-3 py-1.5 text-xs font-semibold font-mono text-foreground bg-muted/50 rounded-lg border border-border/50 uppercase tracking-wider">
+            <span key={tech} className={tech.toLowerCase() === "ia"
+              ? "px-3 py-1.5 text-xs font-bold font-mono uppercase tracking-wider rounded-lg bg-foreground text-background"
+              : "px-3 py-1.5 text-xs font-semibold font-mono text-foreground bg-muted/50 rounded-lg border border-border/50 uppercase tracking-wider"
+            }>
               {tech}
             </span>
           ))}
@@ -192,7 +195,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
 
       {/* Navbar */}
       <nav className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/40">
-        <div className="container max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="container max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link href="/#projects" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group">
             <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">Voltar para Projetos</span>
@@ -210,7 +213,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
 
       {/* ════════ MOBILE: two-column hero ════════ */}
       {mode === "mobile" && (
-        <section className="container max-w-6xl mx-auto px-6 pt-36 pb-16">
+        <section className="container max-w-6xl mx-auto px-6 pt-24 pb-16">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
             {/* LEFT: preview */}
             <div className="w-full lg:w-auto lg:shrink-0 flex justify-center">
@@ -255,7 +258,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
 
       {/* ════════ MULTIPLATFORM: title -> visuals -> info ════════ */}
       {mode === "multiplatform" && (
-        <section className="pt-36 pb-16">
+        <section className="pt-24 pb-16">
           <div className="container max-w-4xl mx-auto px-6 text-center mb-16">
             {/* Badges */}
             <div className="flex flex-wrap justify-center gap-2 mb-6">
@@ -283,25 +286,23 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
           </div>
 
           <div className="container max-w-6xl mx-auto px-6 mb-16">
-            <div className="grid grid-cols-[70px_1fr] sm:grid-cols-[90px_1fr] md:grid-cols-[130px_1fr] lg:grid-cols-[180px_1fr] gap-4 sm:gap-6 lg:gap-12 items-start justify-center max-w-5xl mx-auto">
+            <div className="flex gap-4 sm:gap-6 lg:gap-12 items-end max-w-5xl mx-auto">
               {project.mobileImages && (
-                <div className="min-w-0 flex flex-col items-center">
-                  <div className="flex flex-col xl:flex-row items-center gap-1 xl:gap-2 mb-3 lg:mb-4 text-xs lg:text-sm text-muted-foreground w-full justify-center">
-                    <div className="flex items-center gap-1.5"><Smartphone size={14} /> <span className="font-medium">Mobile</span></div>
-                    <span className="text-[10px] lg:text-xs opacity-60 text-center xl:text-left hidden md:block">— Dia a dia</span>
-                  </div>
-                  <div className="w-full max-w-[220px]">
-                    <MobileCarousel images={project.mobileImages} width="100%" />
+                <div className="shrink-0 w-[70px] sm:w-[90px] md:w-[130px] lg:w-[180px] flex flex-col items-center">
+                  <MobileCarousel images={project.mobileImages} width="100%" />
+                  <div className="flex items-center gap-1 mt-3 text-xs text-muted-foreground">
+                    <Smartphone size={12} />
+                    <span className="font-medium hidden sm:block">Mobile</span>
                   </div>
                 </div>
               )}
               {project.desktopImages && (
-                <div className="min-w-0">
-                  <div className="flex flex-col xl:flex-row items-start xl:items-center gap-1 xl:gap-2 mb-3 lg:mb-4 text-xs lg:text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1.5"><Monitor size={14} /> <span className="font-medium">Desktop</span></div>
-                    <span className="text-[10px] lg:text-xs opacity-60 hidden md:block">— Ferramenta avançada</span>
-                  </div>
+                <div className="flex-1 min-w-0 flex flex-col">
                   <DesktopCarousel images={project.desktopImages} />
+                  <div className="flex items-center gap-1 mt-3 text-xs text-muted-foreground">
+                    <Monitor size={12} />
+                    <span className="font-medium hidden sm:block">Desktop</span>
+                  </div>
                 </div>
               )}
             </div>
@@ -315,16 +316,46 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
         </section>
       )}
 
-      {/* ════════ DESKTOP: Side-by-side layout (Visuals Left, Info Right) ════════ */}
       {mode === "desktop" && (
-        <section className="container max-w-[90rem] mx-auto px-6 pt-36 pb-16">
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
-            {/* LEFT: preview */}
-            <div className="w-full lg:flex-[1.5] min-w-0">
+        <section className="container max-w-6xl mx-auto px-6 pt-24 pb-16">
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-start">
+
+            {/* LEFT: carousel + tech + button */}
+            <div className="w-full lg:flex-[1.5] min-w-0 flex flex-col gap-6">
               <DesktopCarousel images={project.images} />
+
+              {/* Tech + button below images */}
+              <div className="flex flex-col gap-4 pt-2 border-t border-border/20">
+                <div className="flex flex-wrap gap-2">
+                  {project.tech.map((tech) => (
+                    <span key={tech} className={tech.toLowerCase() === "ia"
+                      ? "px-3 py-1.5 text-xs font-bold font-mono uppercase tracking-wider rounded-lg bg-foreground text-background"
+                      : "px-3 py-1.5 text-xs font-semibold font-mono text-foreground bg-muted/50 rounded-lg border border-border/50 uppercase tracking-wider"
+                    }>
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {project.live !== "#" && (
+                    <a href={project.live} target="_blank" rel="noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-foreground text-background rounded-full text-sm font-medium hover:bg-foreground/90 transition-colors">
+                      Acessar <ArrowUpRight size={16} />
+                    </a>
+                  )}
+                  {project.download && project.download !== "#" && (
+                    <a href={project.download} download
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-medium hover:bg-primary/90 shadow-lg shadow-primary/20">
+                      <Download size={16} />
+                      Baixar APK
+                      {project.version && <span className="opacity-80 font-normal">v{project.version}</span>}
+                    </a>
+                  )}
+                </div>
+              </div>
             </div>
 
-            {/* RIGHT: title + info */}
+            {/* RIGHT: badge + title + description + about */}
             <div className="w-full lg:flex-1 min-w-0 space-y-8">
               {/* Badges */}
               <div className="flex flex-wrap gap-2">
@@ -339,7 +370,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
                   </div>
                 )}
               </div>
-              
+
               <div>
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight mb-4 break-words">{project.title}</h1>
                 <p className="text-lg text-muted-foreground font-light leading-relaxed">{project.description}</p>
@@ -352,7 +383,13 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
                 </div>
               )}
 
-              <InfoBlock project={project} />
+              {/* About only (no tech/buttons — those are below the carousel) */}
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Sobre o Projeto</h3>
+                <p className="text-foreground/80 leading-relaxed font-light text-base">
+                  {project.longDescription || project.description}
+                </p>
+              </div>
             </div>
           </div>
         </section>
