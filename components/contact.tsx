@@ -95,7 +95,7 @@ export function Contact() {
                 <Download className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors group-hover:scale-110" />
               </a>
             </div>
-            <p className="text-sm text-muted-foreground">&copy; 2024 Eliabi Santos.</p>
+            <p className="text-sm text-muted-foreground">&copy; 2025 Eliabi Santos.</p>
           </div>
         </div>
       </footer>
