@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useMemo } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, Float, ContactShadows, Environment } from "@react-three/drei"
 import * as THREE from "three"
@@ -17,8 +17,8 @@ const C = {
 }
 
 const HEIGHT: Record<string, number> = {
-  [C.O]: 0.010, [C.D]: 0.007, [C.S]: 0.016,
-  [C.L]: 0.030, [C.H]: 0.046, [C.W]: 0.048, [C.I]: 0.018,
+  [C.O]: 0.030, [C.D]: 0.022, [C.S]: 0.040,
+  [C.L]: 0.075, [C.H]: 0.115, [C.W]: 0.055, [C.I]: 0.035,
 }
 
 const MAT: Record<string, { roughness: number; metalness: number }> = {
@@ -46,8 +46,8 @@ type Row10 = [string,string,string,string,string,string,string,string,string,str
 type Map10 = [Row10,Row10,Row10,Row10,Row10,Row10,Row10,Row10,Row10,Row10]
 
 const MAPS: Map10[] = [
-  [[D,O,O,O,O,O,O,O,O,D],[O,O,O,S,S,O,O,O,O,O],[O,O,L,L,L,O,O,O,W,O],[O,O,H,H,L,L,O,O,O,O],[W,O,L,H,H,L,O,O,O,O],[O,O,L,L,H,L,O,W,O,O],[O,S,S,L,L,O,O,O,O,O],[O,O,O,S,L,L,O,O,W,O],[O,O,O,O,S,L,O,O,O,O],[I,I,O,O,O,O,O,O,I,I]],
-  [[D,D,O,O,O,O,O,D,D,D],[O,O,O,O,S,O,O,O,O,O],[O,W,O,L,L,L,L,O,O,O],[O,O,L,L,H,H,L,L,O,O],[O,L,H,H,H,H,L,L,W,O],[O,L,L,H,H,L,L,L,O,O],[W,O,L,L,L,S,S,O,O,O],[O,O,O,L,L,L,O,W,O,O],[O,O,O,O,O,S,O,O,O,O],[I,I,I,O,O,O,I,I,I,I]],
+  [[D,O,O,O,O,O,O,O,O,D],[O,O,O,S,S,O,O,O,O,O],[W,O,L,L,L,O,O,O,O,O],[O,O,H,H,L,L,O,O,O,O],[O,O,L,H,H,L,O,O,W,O],[O,O,L,L,H,L,O,O,O,O],[O,S,S,L,L,O,O,O,O,O],[O,O,O,S,L,L,O,O,W,O],[O,O,O,O,S,L,O,O,O,O],[I,I,O,O,O,O,O,O,I,I]],
+  [[D,W,O,O,O,O,O,D,D,D],[O,O,O,O,S,O,O,O,O,O],[W,O,O,L,L,L,L,O,O,O],[O,O,L,L,H,H,L,L,O,O],[O,L,H,H,H,H,L,L,O,O],[O,L,L,H,H,L,L,L,O,O],[W,O,L,L,L,S,S,O,O,O],[O,O,O,L,L,L,O,W,O,O],[O,O,O,O,O,S,O,O,O,O],[I,I,I,O,O,O,I,I,I,I]],
   [[O,O,S,L,L,S,O,O,O,D],[O,W,O,L,H,L,O,W,O,O],[S,O,L,L,L,L,O,O,S,O],[O,O,O,W,O,O,L,L,O,O],[O,L,O,O,O,W,O,L,O,O],[O,O,W,O,L,L,O,O,W,O],[I,O,O,L,L,O,O,O,O,I],[I,I,O,O,W,O,S,O,I,I],[I,I,I,O,O,O,O,I,I,I],[I,I,I,I,W,I,I,I,I,I]],
   [[D,D,O,O,O,O,O,O,D,D],[D,O,O,S,O,O,S,O,O,D],[O,O,L,L,O,O,L,O,O,O],[O,L,L,H,O,W,H,L,O,O],[O,O,W,O,I,I,O,W,O,O],[O,O,O,I,I,I,O,O,O,O],[O,O,O,O,I,O,O,O,O,O],[O,S,O,O,O,O,O,S,O,O],[D,O,O,W,O,W,O,O,O,D],[D,D,O,O,O,O,O,O,D,D]],
   [[D,D,O,O,O,O,O,O,D,D],[O,O,O,S,S,S,O,O,O,O],[O,W,O,L,L,L,H,O,W,O],[O,O,L,L,H,H,L,L,O,O],[O,L,L,H,H,H,L,L,O,W],[W,L,H,H,H,L,L,S,O,O],[O,L,L,L,L,S,S,O,O,O],[O,O,L,L,L,L,O,O,W,O],[O,O,S,S,O,O,O,O,O,O],[I,I,O,O,W,O,O,O,I,I]],
@@ -56,17 +56,24 @@ const MAPS: Map10[] = [
 
 const GRID = 10
 const TILE = 1.0 / GRID
-const GAP  = 0.004
+const OVERLAP = 1.02
 
-function Voxel({ pos, rot, color, h }: { pos: V3; rot: V3; color: string; h: number }) {
+function Voxel({ pos, rot, color, h, scale = 1 }: { pos: V3; rot: V3; color: string; h: number; scale?: number }) {
   const mat = MAT[color] ?? { roughness: 0.6, metalness: 0 }
   const isCloud = color === C.W
+  
+  // Base scales
+  const baseW = isCloud ? TILE * 2.2 : TILE * OVERLAP
+  const baseH = isCloud ? h * 1.2 : h
+  
   return (
     <mesh position={pos} rotation={rot} castShadow receiveShadow>
-      <boxGeometry args={[TILE - GAP, TILE - GAP, h]} />
+      <boxGeometry args={[baseW * scale, baseW * scale, baseH * (isCloud ? scale : 1)]} />
       <meshStandardMaterial color={color} roughness={mat.roughness} metalness={mat.metalness}
         emissive={isCloud ? new THREE.Color("#ffffff") : undefined}
         emissiveIntensity={isCloud ? 0.08 : 0}
+        transparent={isCloud}
+        opacity={isCloud ? 0.8 : 1}
       />
     </mesh>
   )
@@ -92,38 +99,81 @@ function Core() {
 function EarthSculpture() {
   const groupRef = useRef<THREE.Group>(null)
   useFrame((_, delta) => {
-    if (!groupRef.current) return
-    groupRef.current.rotation.y += delta * 0.18
-    groupRef.current.rotation.x += delta * 0.025
-  })
-
-  const tiles: React.ReactNode[] = []
-  FACES.forEach(({ normal, u, v, rot }, fi) => {
-    const nv = new THREE.Vector3(...normal)
-    const uv = new THREE.Vector3(...u)
-    const vv = new THREE.Vector3(...v)
-    for (let row = 0; row < GRID; row++) {
-      for (let col = 0; col < GRID; col++) {
-        const color = MAPS[fi][row][col]
-        const h = HEIGHT[color] ?? 0.010
-        const uOff = col / GRID - 0.5 + TILE / 2
-        const vOff = row / GRID - 0.5 + TILE / 2
-        const cx = nv.x * (0.5 + h / 2) + uv.x * uOff + vv.x * vOff
-        const cy = nv.y * (0.5 + h / 2) + uv.y * uOff + vv.y * vOff
-        const cz = nv.z * (0.5 + h / 2) + uv.z * uOff + vv.z * vOff
-        tiles.push(<Voxel key={`${fi}-${row}-${col}`} pos={[cx, cy, cz]} rot={rot} color={color} h={h} />)
-      }
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 0.18
+      groupRef.current.rotation.x += delta * 0.025
     }
   })
+
+  const { surfaceTiles, cloudTiles } = useMemo(() => {
+    const sTiles: React.ReactNode[] = []
+    const cTiles: React.ReactNode[] = []
+
+    FACES.forEach(({ normal, u, v, rot }, fi) => {
+      const nv = new THREE.Vector3(...normal)
+      const uv = new THREE.Vector3(...u)
+      const vv = new THREE.Vector3(...v)
+      for (let row = 0; row < GRID; row++) {
+        for (let col = 0; col < GRID; col++) {
+          const color = MAPS[fi][row][col]
+          const isCloud = color === C.W
+          
+          const h = HEIGHT[color] ?? 0.010
+          const uOff = (col / GRID - 0.5 + TILE / 2)
+          const vOff = (row / GRID - 0.5 + TILE / 2)
+
+          // Volumetric Cloud Clusters
+          const cloudBaseOffset = 0.68
+          if (isCloud) {
+            const cx = nv.x * cloudBaseOffset + uv.x * uOff + vv.x * vOff
+            const cy = nv.y * cloudBaseOffset + uv.y * uOff + vv.y * vOff
+            const cz = nv.z * cloudBaseOffset + uv.z * uOff + vv.z * vOff
+            
+            // Random scaling for variety
+            const randomScale = 0.8 + Math.random() * 0.7
+            
+            // Main cloud body (reduced height multiplier from 1.5 to 0.8)
+            cTiles.push(<Voxel key={`${fi}-${row}-${col}-c1`} pos={[cx, cy, cz]} rot={rot} color={color} h={h * 0.8} scale={randomScale} />)
+            // Small companion for "cluster" look
+            const ox = uv.x * 0.02, oy = uv.y * 0.02, oz = uv.z * 0.02
+            cTiles.push(<Voxel key={`${fi}-${row}-${col}-c2`} pos={[cx+ox, cy+oy, cz+oz]} rot={rot} color={color} h={h * 0.5} scale={randomScale * 0.7} />)
+
+            // Fill the surface under the floating cloud with Ocean
+            const sH = HEIGHT[C.O]
+            const scx = nv.x * (0.5 + sH / 2) + uv.x * uOff + vv.x * vOff
+            const scy = nv.y * (0.5 + sH / 2) + uv.y * uOff + vv.y * vOff
+            const scz = nv.z * (0.5 + sH / 2) + uv.z * uOff + vv.z * vOff
+            sTiles.push(<Voxel key={`under-${fi}-${row}-${col}`} pos={[scx, scy, scz]} rot={rot} color={C.O} h={sH} />)
+          }
+
+          const h_surface = HEIGHT[color] ?? 0.010
+          const baseOffset = (0.5 + h_surface / 2)
+          const sx = nv.x * baseOffset + uv.x * uOff + vv.x * vOff
+          const sy = nv.y * baseOffset + uv.y * uOff + vv.y * vOff
+          const sz = nv.z * baseOffset + uv.z * uOff + vv.z * vOff
+
+          const tile = (
+            <Voxel key={`${fi}-${row}-${col}`} pos={[sx, sy, sz]} rot={rot} color={color} h={h_surface} />
+          )
+
+          if (!isCloud) sTiles.push(tile)
+        }
+      }
+    })
+    return { surfaceTiles: sTiles, cloudTiles: cTiles }
+  }, [])
 
   return (
     <group ref={groupRef}>
       <Core />
       <mesh>
-        <boxGeometry args={[1.002, 1.002, 1.002]} />
-        <meshStandardMaterial color="#0D1A2A" roughness={0.9} transparent opacity={0.06} />
+        <boxGeometry args={[1.0, 1.0, 1.0]} />
+        <meshStandardMaterial color="#050B14" roughness={1} side={THREE.DoubleSide} />
       </mesh>
-      {tiles}
+      {surfaceTiles}
+      <group>
+        {cloudTiles}
+      </group>
       <pointLight position={[0, 0, 0]} intensity={0.8} color="#FF6020" distance={1.2} decay={2} />
     </group>
   )
