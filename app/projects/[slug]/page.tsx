@@ -226,7 +226,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
             <div className="flex-1 min-w-0 space-y-8">
               {/* Badges */}
               <div className="flex flex-wrap gap-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-foreground text-background text-xs font-bold uppercase tracking-wider">
                   <Smartphone size={13} />
                   <span>Mobile</span>
                 </div>
@@ -262,7 +262,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
           <div className="container max-w-4xl mx-auto px-6 text-center mb-16">
             {/* Badges */}
             <div className="flex flex-wrap justify-center gap-2 mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-foreground text-background text-xs font-bold uppercase tracking-wider">
                 <Smartphone size={13} />
                 <span>Multiplataforma</span>
               </div>
@@ -359,7 +359,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
             <div className="w-full lg:flex-1 min-w-0 space-y-8">
               {/* Badges */}
               <div className="flex flex-wrap gap-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-medium">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-foreground text-background text-xs font-bold uppercase tracking-wider">
                   <Monitor size={13} />
                   <span>Desktop</span>
                 </div>
