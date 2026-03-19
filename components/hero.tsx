@@ -267,7 +267,7 @@ export function Hero() {
                     setShowCube(false) // Trigger code re-typing
                     setShowSelector(false)
                   }}
-                  className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-all duration-300 whitespace-nowrap group ${isActive ? "bg-foreground text-background border-foreground shadow-lg shadow-black/20" : "bg-background/40 text-muted-foreground border-white/5 hover:bg-background/60 hover:text-foreground hover:border-white/10"}`}
+                  className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border transition-all duration-300 whitespace-nowrap group ${isActive ? "bg-foreground text-background border-foreground shadow-lg shadow-black/20" : "bg-background/70 text-foreground/50 border-white/5 hover:bg-background/90 hover:text-foreground hover:border-white/10"}`}
                 >
                   <Icon size={16} className={`${isActive ? "" : "group-hover:scale-110 transition-transform"}`} />
                   <span className="text-[11px] font-mono font-bold tracking-widest uppercase">{t.name}</span>
