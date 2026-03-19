@@ -9,7 +9,9 @@ import * as THREE from "three"
 const C = {
   O: "#4A7EC7",  // ocean
   D: "#2E5492",  // deep ocean
+  DP: "#1A365D", // deepest / trench
   S: "#6B9FDB",  // shallow / coast
+  CO: "#88C5E5", // very shallow / bright coast
   L: "#6BBE45",  // land / grass
   H: "#4E9C30",  // highland
   W: "#F0F2F4",  // cloud
@@ -17,14 +19,16 @@ const C = {
 }
 
 const HEIGHT: Record<string, number> = {
-  [C.O]: 0.030, [C.D]: 0.022, [C.S]: 0.040,
-  [C.L]: 0.075, [C.H]: 0.115, [C.W]: 0.055, [C.I]: 0.035,
+  [C.O]: 0.035, [C.D]: 0.012, [C.DP]: 0.006, [C.S]: 0.050, [C.CO]: 0.060,
+  [C.L]: 0.085, [C.H]: 0.155, [C.W]: 0.055, [C.I]: 0.045,
 }
 
 const MAT: Record<string, { roughness: number; metalness: number }> = {
   [C.O]: { roughness: 0.25, metalness: 0.15 },
   [C.D]: { roughness: 0.20, metalness: 0.18 },
+  [C.DP]: { roughness: 0.15, metalness: 0.20 },
   [C.S]: { roughness: 0.30, metalness: 0.10 },
+  [C.CO]: { roughness: 0.35, metalness: 0.05 },
   [C.L]: { roughness: 0.70, metalness: 0.00 },
   [C.H]: { roughness: 0.75, metalness: 0.00 },
   [C.W]: { roughness: 0.90, metalness: 0.00 },
@@ -41,17 +45,17 @@ const FACES: { normal: V3; u: V3; v: V3; rot: V3 }[] = [
   { normal: [ 0, 0,-1], u: [-1,0, 0], v: [0, 1, 0], rot: [0, Math.PI, 0]   },
 ]
 
-const { O, D, S, L, H, W, I } = C
+const { O, D, DP, S, CO, L, H, W, I } = C
 type Row10 = [string,string,string,string,string,string,string,string,string,string]
 type Map10 = [Row10,Row10,Row10,Row10,Row10,Row10,Row10,Row10,Row10,Row10]
 
 const MAPS: Map10[] = [
-  [[D,O,O,O,O,O,O,O,O,D],[O,O,O,S,S,O,O,O,O,O],[W,O,L,L,L,O,O,O,O,O],[O,O,H,H,L,L,O,O,O,O],[O,O,L,H,H,L,O,O,W,O],[O,O,L,L,H,L,O,O,O,O],[O,S,S,L,L,O,O,O,O,O],[O,O,O,S,L,L,O,O,W,O],[O,O,O,O,S,L,O,O,O,O],[I,I,O,O,O,O,O,O,I,I]],
-  [[D,W,O,O,O,O,O,D,D,D],[O,O,O,O,S,O,O,O,O,O],[W,O,O,L,L,L,L,O,O,O],[O,O,L,L,H,H,L,L,O,O],[O,L,H,H,H,H,L,L,O,O],[O,L,L,H,H,L,L,L,O,O],[W,O,L,L,L,S,S,O,O,O],[O,O,O,L,L,L,O,W,O,O],[O,O,O,O,O,S,O,O,O,O],[I,I,I,O,O,O,I,I,I,I]],
-  [[O,O,S,L,L,S,O,O,O,D],[O,W,O,L,H,L,O,W,O,O],[S,O,L,L,L,L,O,O,S,O],[O,O,O,W,O,O,L,L,O,O],[O,L,O,O,O,W,O,L,O,O],[O,O,W,O,L,L,O,O,W,O],[I,O,O,L,L,O,O,O,O,I],[I,I,O,O,W,O,S,O,I,I],[I,I,I,O,O,O,O,I,I,I],[I,I,I,I,W,I,I,I,I,I]],
-  [[D,D,O,O,O,O,O,O,D,D],[D,O,O,S,O,O,S,O,O,D],[O,O,L,L,O,O,L,O,O,O],[O,L,L,H,O,W,H,L,O,O],[O,O,W,O,I,I,O,W,O,O],[O,O,O,I,I,I,O,O,O,O],[O,O,O,O,I,O,O,O,O,O],[O,S,O,O,O,O,O,S,O,O],[D,O,O,W,O,W,O,O,O,D],[D,D,O,O,O,O,O,O,D,D]],
-  [[D,D,O,O,O,O,O,O,D,D],[O,O,O,S,S,S,O,O,O,O],[O,W,O,L,L,L,H,O,W,O],[O,O,L,L,H,H,L,L,O,O],[O,L,L,H,H,H,L,L,O,W],[W,L,H,H,H,L,L,S,O,O],[O,L,L,L,L,S,S,O,O,O],[O,O,L,L,L,L,O,O,W,O],[O,O,S,S,O,O,O,O,O,O],[I,I,O,O,W,O,O,O,I,I]],
-  [[D,D,D,D,O,D,D,D,D,D],[D,O,O,O,O,O,O,D,D,D],[O,O,O,L,L,L,O,O,O,O],[W,O,L,H,H,L,L,O,W,O],[O,O,L,L,H,L,O,O,O,O],[O,O,S,L,L,S,O,O,O,O],[O,W,O,S,O,O,O,O,W,O],[O,O,O,O,L,L,L,O,O,O],[O,O,O,L,H,L,S,O,O,O],[I,I,O,O,O,O,O,O,I,I]],
+  [[DP,D,O,O,O,O,O,O,D,DP],[D,O,O,S,CO,S,O,W,O,D],[W,O,L,L,L,O,O,O,O,O],[O,O,H,H,L,L,O,O,O,O],[O,O,L,H,H,L,O,O,W,O],[O,O,L,L,H,L,O,O,O,O],[O,S,CO,L,L,O,O,O,O,O],[O,O,O,S,L,L,O,O,W,O],[O,O,D,O,S,L,O,W,O,O],[I,I,O,O,O,D,DP,D,I,I]],
+  [[DP,DP,D,O,O,O,D,DP,DP,DP],[D,O,W,O,S,O,O,O,O,D],[O,O,O,L,L,L,L,O,O,O],[O,O,L,L,H,H,L,L,O,O],[O,L,H,H,H,H,L,L,O,O],[O,L,L,H,H,L,L,L,O,O],[W,O,L,L,L,S,CO,O,O,O],[O,O,O,L,L,L,O,O,W,O],[O,O,O,O,O,S,D,O,O,O],[I,I,I,O,W,O,I,I,I,I]],
+  [[O,O,S,L,L,S,O,O,O,D],[O,O,O,L,H,L,O,W,O,O],[S,CO,L,L,L,L,O,O,S,O],[O,O,O,O,O,W,L,L,O,O],[O,L,O,O,O,W,O,L,O,O],[O,O,W,O,L,L,O,O,W,O],[I,O,O,L,L,O,O,O,O,I],[I,I,O,O,W,O,S,O,I,I],[I,I,I,O,O,O,O,I,I,I],[I,I,I,I,O,I,I,I,I,I]],
+  [[D,DP,D,O,O,O,O,O,D,DP],[D,D,O,S,CO,O,S,O,W,D],[O,O,L,L,O,O,L,O,O,O],[O,L,L,H,O,O,H,L,O,O],[O,O,W,O,I,I,O,O,O,O],[O,O,O,I,I,I,W,O,O,O],[O,O,O,O,I,O,O,O,O,O],[O,S,O,O,O,O,O,S,O,O],[DP,D,O,O,O,W,O,O,D,DP],[DP,DP,D,O,O,O,O,D,DP,DP]],
+  [[DP,D,O,O,O,O,O,O,D,DP],[D,O,O,S,S,S,O,O,O,D],[O,W,O,L,L,L,H,O,O,O],[O,O,L,L,H,H,L,L,O,O],[O,L,L,H,H,H,L,L,O,O],[O,L,H,H,H,L,L,S,O,O],[O,L,L,L,L,S,CO,O,O,O],[D,O,L,L,L,L,O,O,W,O],[D,O,S,S,O,O,O,D,D,D],[I,I,O,O,W,O,O,O,I,I]],
+  [[DP,DP,D,D,O,D,D,DP,DP,DP],[D,O,W,O,O,O,O,D,D,D],[O,O,O,L,L,L,O,O,O,O],[W,O,L,H,H,L,L,O,W,O],[O,O,L,L,H,L,O,O,O,O],[O,O,S,L,L,S,O,O,O,O],[O,W,O,S,O,O,O,O,O,O],[O,O,O,O,L,L,L,O,O,O],[O,D,O,L,H,L,S,O,W,O],[I,I,O,O,O,O,O,O,I,I]],
 ]
 
 const GRID = 10
@@ -61,6 +65,10 @@ const OVERLAP = 1.02
 function Voxel({ pos, rot, color, h, scale = 1 }: { pos: V3; rot: V3; color: string; h: number; scale?: number }) {
   const mat = MAT[color] ?? { roughness: 0.6, metalness: 0 }
   const isCloud = color === C.W
+  const isDeep = color === C.D || color === C.DP
+  const isOcean = color === C.O
+  const isShallow = color === C.S || color === C.CO
+  const isWater = isDeep || isOcean || isShallow
   
   // Base scales
   const baseW = isCloud ? TILE * 2.2 : TILE * OVERLAP
@@ -70,10 +78,10 @@ function Voxel({ pos, rot, color, h, scale = 1 }: { pos: V3; rot: V3; color: str
     <mesh position={pos} rotation={rot} castShadow receiveShadow>
       <boxGeometry args={[baseW * scale, baseW * scale, baseH * (isCloud ? scale : 1)]} />
       <meshStandardMaterial color={color} roughness={mat.roughness} metalness={mat.metalness}
-        emissive={isCloud ? new THREE.Color("#ffffff") : undefined}
-        emissiveIntensity={isCloud ? 0.08 : 0}
-        transparent={isCloud}
-        opacity={isCloud ? 0.8 : 1}
+        emissive={isWater ? new THREE.Color(color).multiplyScalar(0.2) : (isCloud ? new THREE.Color("#ffffff") : undefined)}
+        emissiveIntensity={isCloud ? 0.08 : 0.4}
+        transparent={isCloud || isWater}
+        opacity={isCloud ? 0.8 : (isDeep ? 0.3 : isOcean ? 0.5 : isShallow ? 0.7 : 1)}
       />
     </mesh>
   )
@@ -89,9 +97,9 @@ function Core() {
   })
   return (
     <mesh ref={meshRef}>
-      <boxGeometry args={[0.82, 0.82, 0.82]} />
-      <meshStandardMaterial color="#FF6B1A" emissive={new THREE.Color("#FF4400")}
-        emissiveIntensity={0.6} roughness={1} metalness={0} transparent opacity={0.92} />
+      <boxGeometry args={[0.92, 0.92, 0.92]} />
+      <meshStandardMaterial color="#FF3D00" emissive={new THREE.Color("#FF2200")}
+        emissiveIntensity={0.6} roughness={1} metalness={0} side={THREE.DoubleSide} />
     </mesh>
   )
 }
