@@ -1,11 +1,11 @@
 "use client"
 
-import { useRef, useState, useMemo } from "react"
+import { useRef, useState, useMemo, useEffect } from "react"
 import { Canvas, useFrame, ThreeEvent } from "@react-three/fiber"
 import { OrbitControls, Float, ContactShadows, Environment } from "@react-three/drei"
 import * as THREE from "three"
 
-// ─── Extended voxel type (supports emissive glow) ────────────────────────────
+// ─── Extended voxel type ─────────────────────────────────────────────────────
 type VC = {
   color: string
   depth: number
@@ -14,67 +14,67 @@ type VC = {
 }
 type V3 = [number, number, number]
 
-// ─── Palette ── Obsidian + purple glow + dark red accents ────────────────────
-const OBS: VC = { color: "#24183A", depth: 0.030 }          // obsidian
-const DRK: VC = { color: "#18102A", depth: 0.020 }          // dark obsidian
-const TRM: VC = { color: "#0E0A18", depth: 0.018 }          // trim / frame
-const OBL: VC = { color: "#352449", depth: 0.038 }          // lighter obsidian
-const RED: VC = { color: "#5C1212", depth: 0.035 }          // red accent
-const RDB: VC = { color: "#3D0A0A", depth: 0.022 }          // dark red
-const EYE: VC = { color: "#8822CC", depth: 0.052,           // outer eye
-  emissive: "#5500AA", emissiveIntensity: 0.7 }
-const EYG: VC = { color: "#CC55FF", depth: 0.068,           // bright eye
-  emissive: "#AA00FF", emissiveIntensity: 1.6 }
-const EYC: VC = { color: "#66DDFF", depth: 0.050,           // cyan center
-  emissive: "#00BBFF", emissiveIntensity: 1.4 }
-const INT: VC = { color: "#0C0612", depth: 0.008 }          // interior fill
+// ─── Cartoon Palette ── Teal Obsidian + Yellow Latch + Cyan Eye ──────────────
+// Offset depths for tactile relief ("mesma pegada"), softer cartoon colors
+const TRM: VC = { color: "#111A1C", depth: 0.050 } // Trim / Frame (black/dark-blueish)
+const OBS: VC = { color: "#253436", depth: 0.035 } // Base obsidian
+const OBL: VC = { color: "#3B4E4D", depth: 0.045 } // Lighter obsidian pop
+const DRK: VC = { color: "#172022", depth: 0.020 } // Darker crevices
+const EY1: VC = { color: "#1A3D36", depth: 0.038 } // Outer eye aura
+const EY2: VC = { color: "#4A8A6A", depth: 0.050, emissive: "#4D8F70", emissiveIntensity: 0.8 } // Bright green/cyan
+const EY3: VC = { color: "#82E2A6", depth: 0.065, emissive: "#7ED49A", emissiveIntensity: 1.5 } // Core eye bright glow
+const INT: VC = { color: "#000000", depth: 0.010 } // Interior void
+
+const LLY: VC = { color: "#F0E486", depth: 0.025 } // Latch highlights
+const LLM: VC = { color: "#DBCF74", depth: 0.025 }
+const LLD: VC = { color: "#B8AD5B", depth: 0.025 }
 
 // ─── Face maps ───────────────────────────────────────────────────────────────
-// ESIDE  — obsidian sides (10 rows × 8 cols)
+// ESIDE (10 rows × 8 cols)
 const ESIDE: VC[][] = [
   [TRM,TRM,TRM,TRM,TRM,TRM,TRM,TRM],
-  [TRM,OBS,OBL,OBS,OBS,OBL,OBS,TRM],
-  [TRM,OBL,RED,RDB,RDB,RED,OBL,TRM],
-  [TRM,OBS,RDB,OBS,OBS,RDB,OBS,TRM],
-  [TRM,DRK,OBS,DRK,DRK,OBS,DRK,TRM],
-  [TRM,DRK,OBS,DRK,DRK,OBS,DRK,TRM],
-  [TRM,OBS,RDB,OBS,OBS,RDB,OBS,TRM],
-  [TRM,OBL,RED,RDB,RDB,RED,OBL,TRM],
-  [TRM,OBS,OBL,OBS,OBS,OBL,OBS,TRM],
+  [TRM,OBS,OBL,OBS,DRK,OBL,OBS,TRM],
+  [TRM,OBL,DRK,OBS,OBS,DRK,OBL,TRM],
+  [TRM,OBS,OBL,DRK,OBL,OBS,DRK,TRM],
+  [TRM,DRK,OBS,OBL,DRK,OBS,OBL,TRM],
+  [TRM,OBS,DRK,OBS,OBL,DRK,OBS,TRM],
+  [TRM,OBL,OBS,DRK,OBS,OBL,DRK,TRM],
+  [TRM,DRK,OBL,OBS,DRK,OBS,OBL,TRM],
+  [TRM,OBS,DRK,OBL,OBS,DRK,OBS,TRM],
   [TRM,TRM,TRM,TRM,TRM,TRM,TRM,TRM],
 ]
 
-// EFRONT — front face with glowing eyes (10 rows × 8 cols)
+// EFRONT — eye placed centrally
 const EFRONT: VC[][] = [
   [TRM,TRM,TRM,TRM,TRM,TRM,TRM,TRM],
-  [TRM,OBS,OBL,OBS,OBS,OBL,OBS,TRM],
-  [TRM,OBL,RED,RDB,RDB,RED,OBL,TRM],
-  [TRM,OBS,EYE,EYG,EYG,EYE,OBS,TRM],
-  [TRM,OBS,EYG,EYC,EYC,EYG,OBS,TRM],
-  [TRM,OBS,EYE,EYG,EYG,EYE,OBS,TRM],
-  [TRM,OBL,RED,RDB,RDB,RED,OBL,TRM],
-  [TRM,OBS,OBL,OBS,OBS,OBL,OBS,TRM],
-  [TRM,OBS,DRK,OBS,OBS,DRK,OBS,TRM],
+  [TRM,OBS,OBL,EY1,EY1,OBL,OBS,TRM],
+  [TRM,OBL,EY1,EY2,EY2,EY1,OBL,TRM],
+  [TRM,OBS,EY2,EY3,EY3,EY2,DRK,TRM],
+  [TRM,DRK,EY2,EY3,EY3,EY2,OBL,TRM],
+  [TRM,OBS,EY1,EY2,EY2,EY1,OBS,TRM],
+  [TRM,OBL,OBS,EY1,EY1,OBL,DRK,TRM],
+  [TRM,DRK,OBL,OBS,DRK,OBS,OBL,TRM],
+  [TRM,OBS,DRK,OBL,OBS,DRK,OBS,TRM],
   [TRM,TRM,TRM,TRM,TRM,TRM,TRM,TRM],
 ]
 
-// ETOP — top face (8 rows × 8 cols)
+// ETOP (8 rows × 8 cols)
 const ETOP: VC[][] = [
   [TRM,TRM,TRM,TRM,TRM,TRM,TRM,TRM],
-  [TRM,OBL,DRK,OBL,OBL,DRK,OBL,TRM],
-  [TRM,DRK,OBS,DRK,DRK,OBS,DRK,TRM],
-  [TRM,OBL,DRK,OBS,OBS,DRK,OBL,TRM],
-  [TRM,OBL,DRK,OBS,OBS,DRK,OBL,TRM],
-  [TRM,DRK,OBS,DRK,DRK,OBS,DRK,TRM],
-  [TRM,OBL,DRK,OBL,OBL,DRK,OBL,TRM],
+  [TRM,OBS,DRK,OBL,OBS,DRK,OBS,TRM],
+  [TRM,DRK,OBL,OBS,DRK,OBL,DRK,TRM],
+  [TRM,OBL,OBS,DRK,OBL,OBS,OBL,TRM],
+  [TRM,OBS,DRK,OBL,OBS,DRK,OBS,TRM],
+  [TRM,DRK,OBL,OBS,DRK,OBL,DRK,TRM],
+  [TRM,OBL,OBS,DRK,OBL,OBS,OBL,TRM],
   [TRM,TRM,TRM,TRM,TRM,TRM,TRM,TRM],
 ]
 
 // ELSIDE — lid side (4 rows × 8 cols)
 const ELSIDE: VC[][] = [
   [TRM,TRM,TRM,TRM,TRM,TRM,TRM,TRM],
-  [TRM,OBL,DRK,OBL,OBL,DRK,OBL,TRM],
-  [TRM,OBS,RED,RDB,RDB,RED,OBS,TRM],
+  [TRM,OBL,DRK,OBS,OBL,DRK,OBL,TRM],
+  [TRM,OBS,OBL,DRK,OBS,OBL,OBS,TRM],
   [TRM,TRM,TRM,TRM,TRM,TRM,TRM,TRM],
 ]
 
@@ -92,7 +92,7 @@ const FROT: Record<string, { rot: V3; u: V3; v: V3; norm: V3 }> = {
   "-y": { rot: [PI2,0,0],      u:[1,0,0],  v:[0,0,1],  norm:[0,-1,0] },
 }
 
-const OVERLAP = 1.004
+const OVERLAP = 1.01 // Eliminando a transparência entre pixels (igual báu normal)
 
 function buildFace(
   key: string, fc: V3, fw: number, fh: number, grid: VC[][], prefix: string
@@ -117,8 +117,8 @@ function buildFace(
         <boxGeometry args={[vw*OVERLAP, vh*OVERLAP, depth + 0.002]} />
         <meshStandardMaterial
           color={color}
-          roughness={0.72}
-          metalness={0.04}
+          roughness={0.85}
+          metalness={0.05}
           emissive={emissive ? new THREE.Color(emissive) : undefined}
           emissiveIntensity={emissiveIntensity ?? 0}
         />
@@ -127,7 +127,7 @@ function buildFace(
   }))
 }
 
-// ─── Chest dimensions (same as regular chest) ────────────────────────────────
+// ─── Chest dimensions ─────────────────────────────────────────────────────────
 const W  = 0.95
 const H  = 0.72
 const D  = 0.95
@@ -141,17 +141,15 @@ function EnderChestGroup({ onOpen, onClose }: { onOpen?: () => void; onClose?: (
   const glowRef   = useRef<THREE.PointLight>(null)
   const [isOpen, setIsOpen] = useState(false)
 
-  // ── Body voxels ──────────────────────────────────────────────────────────
   const bodyVoxels = useMemo(() => [
-    ...buildFace("+z", [0, BY, D/2],    W, H, EFRONT, "bf"),  // front — eyes
-    ...buildFace("-z", [0, BY,-D/2],    W, H, ESIDE,  "bk"),  // back
-    ...buildFace("+x", [W/2, BY, 0],    D, H, ESIDE,  "br"),  // right
-    ...buildFace("-x", [-W/2, BY, 0],   D, H, ESIDE,  "bl"),  // left
-    ...buildFace("+y", [0, BY+H/2, 0],  W, D, ETOP,   "bt"),  // top
-    ...buildFace("-y", [0, BY-H/2, 0],  W, D, fill(8,8), "bb"), // bottom
+    ...buildFace("+z", [0, BY, D/2],    W, H, EFRONT, "bf"),
+    ...buildFace("-z", [0, BY,-D/2],    W, H, ESIDE,  "bk"),
+    ...buildFace("+x", [W/2, BY, 0],    D, H, ESIDE,  "br"),
+    ...buildFace("-x", [-W/2, BY, 0],   D, H, ESIDE,  "bl"),
+    ...buildFace("+y", [0, BY+H/2, 0],  W, D, ETOP,   "bt"),
+    ...buildFace("-y", [0, BY-H/2, 0],  W, D, fill(8,8), "bb"),
   ], [])
 
-  // ── Lid voxels (pivot-local) ─────────────────────────────────────────────
   const lidVoxels = useMemo(() => [
     ...buildFace("+z", [0, LH/2, D],       W, LH, ELSIDE, "lf"),
     ...buildFace("-z", [0, LH/2, 0],       W, LH, ELSIDE, "lk"),
@@ -161,7 +159,17 @@ function EnderChestGroup({ onOpen, onClose }: { onOpen?: () => void; onClose?: (
     ...buildFace("-y", [0, 0, D/2],        W, D,  fill(8,8), "lb"),
   ], [])
 
-  // ── Interior geometry (MeshBasicMaterial — always visible) ───────────────
+  const latchVoxels = useMemo(() => {
+    const LGRID: VC[][] = [
+      [LLY, LLY, LLY ],
+      [LLY, LLM, LLY ],
+      [LLM, LLD, LLM ],
+      [LLD, LLD, LLD ],
+    ]
+    // Offset Z by 0.052 so the latch pops out significantly from the lid
+    return buildFace("+z", [0, 0, D + 0.052], 0.20, 0.28, LGRID, "la")
+  }, [])
+
   const INSET = 0.025
   const iW = W - INSET * 2
   const iD = D - INSET * 2
@@ -169,30 +177,30 @@ function EnderChestGroup({ onOpen, onClose }: { onOpen?: () => void; onClose?: (
 
   const interiorGeometry = useMemo(() => (
     <group position={[0, BY, 0]}>
-      {/* Chão — roxo escuro */}
+      {/* Floor — matte-black void */}
       <mesh position={[0, -H/2 + INSET, 0]} rotation={[-Math.PI/2, 0, 0]}>
         <planeGeometry args={[iW, iD]} />
-        <meshBasicMaterial color="#0D0020" />
+        <meshBasicMaterial color="#000000" side={THREE.DoubleSide} />
       </mesh>
-      {/* Parede de fundo */}
+      {/* Back wall */}
       <mesh position={[0, 0, -D/2 + INSET]}>
         <planeGeometry args={[iW, iH]} />
-        <meshBasicMaterial color="#160030" />
+        <meshBasicMaterial color="#000000" side={THREE.DoubleSide} />
       </mesh>
-      {/* Parede da frente */}
+      {/* Front wall */}
       <mesh position={[0, 0, D/2 - INSET]} rotation={[0, Math.PI, 0]}>
         <planeGeometry args={[iW, iH]} />
-        <meshBasicMaterial color="#160030" />
+        <meshBasicMaterial color="#000000" side={THREE.DoubleSide} />
       </mesh>
-      {/* Parede esquerda */}
+      {/* Left wall */}
       <mesh position={[-W/2 + INSET, 0, 0]} rotation={[0, Math.PI/2, 0]}>
         <planeGeometry args={[iD, iH]} />
-        <meshBasicMaterial color="#160030" />
+        <meshBasicMaterial color="#000000" side={THREE.DoubleSide} />
       </mesh>
-      {/* Parede direita */}
+      {/* Right wall */}
       <mesh position={[W/2 - INSET, 0, 0]} rotation={[0, -Math.PI/2, 0]}>
         <planeGeometry args={[iD, iH]} />
-        <meshBasicMaterial color="#160030" />
+        <meshBasicMaterial color="#000000" side={THREE.DoubleSide} />
       </mesh>
     </group>
   ), [])
@@ -201,15 +209,14 @@ function EnderChestGroup({ onOpen, onClose }: { onOpen?: () => void; onClose?: (
     if (groupRef.current) groupRef.current.rotation.y += delta * 0.14
 
     if (pivotRef.current) {
-      const target = isOpen ? -1.38 : 0
+      const target = isOpen ? -Math.PI / 4 : 0
       pivotRef.current.rotation.x = THREE.MathUtils.lerp(
         pivotRef.current.rotation.x, target, delta * 4.5
       )
     }
 
-    // Purple glow fades in when open
     if (glowRef.current) {
-      const targetIntensity = isOpen ? 4.0 : 0
+      const targetIntensity = isOpen ? 3.5 : 0
       glowRef.current.intensity = THREE.MathUtils.lerp(
         glowRef.current.intensity, targetIntensity, delta * 3.5
       )
@@ -226,29 +233,26 @@ function EnderChestGroup({ onOpen, onClose }: { onOpen?: () => void; onClose?: (
 
   return (
     <group ref={groupRef} onClick={onClick}>
-      {/* Interior walls */}
       {interiorGeometry}
 
-      {/* Purple point light — center of body, fades in when open */}
       <pointLight
         ref={glowRef}
         position={[0, BY, 0]}
         intensity={0}
-        color="#9900FF"
-        distance={1.8}
+        color="#33FFBB"
+        distance={2.0}
         decay={1.6}
       />
 
       {bodyVoxels}
 
-      {/* Lid pivot */}
       <group ref={pivotRef} position={[0, BY + H/2, -D/2]}>
-        {/* Lid interior "ceiling" — deep void when open */}
         <mesh position={[0, 0.012, D/2]} rotation={[Math.PI/2, 0, 0]}>
           <planeGeometry args={[W - 0.06, D - 0.06]} />
-          <meshBasicMaterial color="#0A0018" />
+          <meshBasicMaterial color="#000000" side={THREE.DoubleSide} />
         </mesh>
         {lidVoxels}
+        {latchVoxels}
       </group>
     </group>
   )
@@ -256,24 +260,55 @@ function EnderChestGroup({ onOpen, onClose }: { onOpen?: () => void; onClose?: (
 
 // ─── Export ───────────────────────────────────────────────────────────────────
 export function EnderChest3D() {
+  const openAudioRef  = useRef<HTMLAudioElement | null>(null)
+  const closeAudioRef = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    openAudioRef.current  = new Audio("/templates/ender/ender-open.ogg")
+    closeAudioRef.current = new Audio("/templates/ender/ender-close.ogg")
+    if (openAudioRef.current) openAudioRef.current.volume  = 0.55
+    if (closeAudioRef.current) closeAudioRef.current.volume = 0.55
+  }, [])
+
+  const handleOpen  = () => {
+    closeAudioRef.current?.pause()
+    if (openAudioRef.current) {
+      openAudioRef.current.currentTime = 0
+      openAudioRef.current.play().catch(() => {})
+    }
+  }
+
+  const handleClose = () => {
+    openAudioRef.current?.pause()
+    if (closeAudioRef.current) {
+      closeAudioRef.current.currentTime = 0
+      closeAudioRef.current.play().catch(() => {})
+    }
+  }
+
   return (
     <div className="w-full h-full relative cursor-pointer">
-      <Canvas shadows dpr={[1,2]} camera={{ position:[1.9,1.7,1.9], fov:46 }}
-        gl={{ antialias: true }}>
-        <ambientLight intensity={0.28} />
-        <directionalLight position={[-5,9,4]} intensity={1.4} castShadow
-          shadow-mapSize-width={1024} shadow-mapSize-height={1024} color="#E8D0FF" />
-        <directionalLight position={[4,2,-4]} intensity={0.18} color="#6600CC" />
-        <Environment preset="night" />
+      <Canvas shadows dpr={[1,2]} camera={{ position:[2.2,2.0,2.2], fov:42 }}
+        gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}>
+        
+        <ambientLight intensity={0.45} />
+        
+        <directionalLight position={[-4,8,6]} intensity={2.8} castShadow
+          shadow-mapSize-width={2048} shadow-mapSize-height={2048} shadow-bias={-0.0002} color="#F5FEFF" />
+          
+        <directionalLight position={[6,3,-5]} intensity={1.5} color="#55FFCC" />
+        
+        <directionalLight position={[0, -5, 0]} intensity={0.8} color="#0D2222" />
+        
+        <Environment preset="city" />
 
-        <Float speed={1.1} rotationIntensity={0.06} floatIntensity={0.14}>
-          <EnderChestGroup />
+        <Float speed={1.1} rotationIntensity={0.05} floatIntensity={0.10}>
+          <EnderChestGroup onOpen={handleOpen} onClose={handleClose} />
         </Float>
 
-        <ContactShadows position={[0,-0.56,0]} opacity={0.55} scale={5} blur={2.8} far={2} color="#220044"/>
+        <ContactShadows position={[0,-0.56,0]} opacity={0.65} scale={5} blur={2.0} far={2} color="#081014"/>
         <OrbitControls enablePan={false} enableZoom={false} rotateSpeed={0.5} />
       </Canvas>
-
     </div>
   )
 }
