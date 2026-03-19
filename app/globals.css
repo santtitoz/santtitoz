@@ -144,6 +144,25 @@
     background-color: var(--foreground);
     color: var(--background);
   }
+
+  /* Hide scrollbar globally but keep functionality */
+  html {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  html::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+}
+
+/* Utility to hide scrollbar on specific containers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Added custom animations for the portfolio */
