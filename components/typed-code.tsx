@@ -78,7 +78,7 @@ export function TypedCode({ lines, filename, directory, onComplete }: TypedCodeP
   }, [currentChar, currentLine, onComplete, lines])
 
   return (
-    <div className="w-full h-full p-8 md:p-12 flex flex-col font-mono text-xs sm:text-sm z-20">
+    <div className="w-full h-full p-8 md:p-12 flex flex-col font-mono text-xs sm:text-sm z-20" style={{ fontFamily: "monospace" }}>
 
       {/* Header Minimalista */}
       <div className="flex items-center gap-3 mb-6 opacity-40 select-none border-b border-foreground/10 pb-4 w-full">

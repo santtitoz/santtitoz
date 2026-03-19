@@ -20,9 +20,9 @@ const COLORS = {
 function Face({ dir, color }: { dir: [number, number, number], color: string }) {
   const pos = new THREE.Vector3(...dir).multiplyScalar(0.495)
   const rot = new THREE.Euler()
-  if (dir[0] === 1)  rot.set(0,  Math.PI / 2, 0)
+  if (dir[0] === 1) rot.set(0, Math.PI / 2, 0)
   else if (dir[0] === -1) rot.set(0, -Math.PI / 2, 0)
-  else if (dir[1] === 1)  rot.set(-Math.PI / 2, 0, 0)
+  else if (dir[1] === 1) rot.set(-Math.PI / 2, 0, 0)
   else if (dir[1] === -1) rot.set(Math.PI / 2, 0, 0)
   else if (dir[2] === -1) rot.set(0, Math.PI, 0)
   return (
@@ -39,20 +39,20 @@ function Cubie({ position, name, ...props }: any) {
       <RoundedBox args={[0.96, 0.96, 0.96]} radius={0.05} smoothness={4}>
         <meshStandardMaterial color="#1a1a1a" roughness={0.2} />
       </RoundedBox>
-      <Face dir={[1, 0, 0]}  color={COLORS.faces.R} />
+      <Face dir={[1, 0, 0]} color={COLORS.faces.R} />
       <Face dir={[-1, 0, 0]} color={COLORS.faces.L} />
-      <Face dir={[0, 1, 0]}  color={COLORS.faces.U} />
+      <Face dir={[0, 1, 0]} color={COLORS.faces.U} />
       <Face dir={[0, -1, 0]} color={COLORS.faces.D} />
-      <Face dir={[0, 0, 1]}  color={COLORS.faces.F} />
+      <Face dir={[0, 0, 1]} color={COLORS.faces.F} />
       <Face dir={[0, 0, -1]} color={COLORS.faces.B} />
     </group>
   )
 }
 
 function RubiksGame() {
-  const groupRef   = useRef<THREE.Group>(null)
-  const orbit      = useRef<any>(null)
-  const pivotRef   = useRef<THREE.Group>(null)
+  const groupRef = useRef<THREE.Group>(null)
+  const orbit = useRef<any>(null)
+  const pivotRef = useRef<THREE.Group>(null)
   const isAnimating = useRef(false)
   const moveHistory = useRef<{ axis: string; slice: number; dir: number }[]>([])
 
@@ -65,7 +65,7 @@ function RubiksGame() {
     return arr
   }, [])
 
-  const startPoint   = useRef<THREE.Vector3 | null>(null)
+  const startPoint = useRef<THREE.Vector3 | null>(null)
   const startFaceNorm = useRef<THREE.Vector3 | null>(null)
   const intersectedObject = useRef<THREE.Object3D | null>(null)
 
@@ -94,13 +94,13 @@ function RubiksGame() {
     let axisToRotate = '', direction = 0
     if (Math.abs(norm.x) > 0.5) {
       if (y > z) { axisToRotate = 'z'; direction = moveVec.y > 0 ? -1 : 1 }
-      else        { axisToRotate = 'y'; direction = moveVec.z > 0 ?  1 : -1 }
+      else { axisToRotate = 'y'; direction = moveVec.z > 0 ? 1 : -1 }
     } else if (Math.abs(norm.y) > 0.5) {
-      if (x > z) { axisToRotate = 'z'; direction = moveVec.x > 0 ?  1 : -1 }
-      else        { axisToRotate = 'x'; direction = moveVec.z > 0 ?  1 : -1 }
+      if (x > z) { axisToRotate = 'z'; direction = moveVec.x > 0 ? 1 : -1 }
+      else { axisToRotate = 'x'; direction = moveVec.z > 0 ? 1 : -1 }
     } else {
-      if (x > y) { axisToRotate = 'y'; direction = moveVec.x > 0 ?  1 : -1 }
-      else        { axisToRotate = 'x'; direction = moveVec.y > 0 ? -1 :  1 }
+      if (x > y) { axisToRotate = 'y'; direction = moveVec.x > 0 ? 1 : -1 }
+      else { axisToRotate = 'x'; direction = moveVec.y > 0 ? -1 : 1 }
     }
     const pos = intersectedObject.current.position.clone()
     const sliceVal = axisToRotate === 'x' ? Math.round(pos.x)
@@ -144,9 +144,9 @@ function RubiksGame() {
         targetCubies.forEach(c => {
           c.position.set(Math.round(c.position.x), Math.round(c.position.y), Math.round(c.position.z))
           c.rotation.set(
-            Math.round(c.rotation.x / (Math.PI/2)) * (Math.PI/2),
-            Math.round(c.rotation.y / (Math.PI/2)) * (Math.PI/2),
-            Math.round(c.rotation.z / (Math.PI/2)) * (Math.PI/2),
+            Math.round(c.rotation.x / (Math.PI / 2)) * (Math.PI / 2),
+            Math.round(c.rotation.y / (Math.PI / 2)) * (Math.PI / 2),
+            Math.round(c.rotation.z / (Math.PI / 2)) * (Math.PI / 2),
           )
           c.updateMatrix()
         })
@@ -164,9 +164,9 @@ function RubiksGame() {
         for (let i = 0; i < 8; i++) {
           if (!mounted) return
           const axes = ['x', 'y', 'z']
-          const axis  = axes[Math.floor(Math.random() * 3)]
+          const axis = axes[Math.floor(Math.random() * 3)]
           const slice = Math.floor(Math.random() * 3) - 1
-          const dir   = Math.random() > 0.5 ? 1 : -1
+          const dir = Math.random() > 0.5 ? 1 : -1
           moveHistory.current.push({ axis, slice, dir })
           await rotateLayer(axis, slice, dir, 150)
           await new Promise(r => setTimeout(r, 50))
