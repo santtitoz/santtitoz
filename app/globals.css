@@ -138,6 +138,12 @@
   html {
     scroll-behavior: smooth;
   }
+
+  /* Custom selection color: Black background/White text (minimalist) */
+  ::selection {
+    background-color: var(--foreground);
+    color: var(--background);
+  }
 }
 
 /* Added custom animations for the portfolio */
